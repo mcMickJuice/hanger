@@ -1,12 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { ItemProvider } from './ItemContext'
+import ReorderThing from './ReorderThing'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const items = [
+	{ id: '1', text: 'First Item' },
+	{ id: '2', text: 'Second Item' },
+	{ id: '3', text: 'Third Item' },
+	{ id: '4', text: 'Fourth Item' },
+	{ id: '5', text: 'Fifth Item' },
+	{ id: '6', text: 'Sixth Item' },
+	{ id: '7', text: 'Seventh Item' }
+]
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const App = () => {
+	return (
+		<ItemProvider initialItems={items}>
+			<ReorderThing />
+		</ItemProvider>
+	)
+}
+
+const rootElement = document.getElementById('root')
+ReactDOM.render(<App />, rootElement)
