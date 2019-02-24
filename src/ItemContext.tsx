@@ -145,6 +145,23 @@ export class ItemProvider extends React.Component<
 		})
 	}
 
+	handlePinItem = (id: string) => {
+		const { positionState } = this.state
+		const positionItemToUpdate = positionState[id]
+
+		const newPositionState: ItemPositionMap = {
+			...positionState,
+			[id]: {
+				...positionItemToUpdate,
+				isPinned: !positionItemToUpdate.isPinned
+			}
+		}
+
+		this.setState({
+			positionState: newPositionState
+		})
+	}
+
 	render() {
 		return (
 			<ItemContext.Provider
