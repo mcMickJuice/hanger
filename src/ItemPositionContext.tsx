@@ -2,58 +2,43 @@ import React from 'react'
 import { Item } from './types'
 
 interface ItemPositionContextType {
-	// pinItem: (id: string) => void
+	pinItem: (id: string) => void
 	randomizeOrder: () => void
 	swapItem: (id: string, isUp: boolean) => void
 	itemIds: string[]
-	// getItemById: (id: string) => Item
+	getItemPositionById: (id: string) => ItemPosition
 }
 
 const ItemPositionContext = React.createContext<ItemPositionContextType>({
-	// pinItem: (_: string) => {
-	// 	throw new Error('pin item called')
-	// },
+	pinItem: (_: string) => {
+		throw new Error('pin item called')
+	},
 	randomizeOrder: () => {
 		throw new Error('randomize order called')
 	},
 	swapItem: (_: string, __: boolean) => {
 		throw new Error('swapItem called')
 	},
-	itemIds: []
-	// getItemById: (_: string) => {
-	// 	throw new Error('item by id called')
-	// }
+	itemIds: [],
+	getItemPositionById: (_: string) => {
+		throw new Error('item by id called')
+	}
 })
 
 export default ItemPositionContext
-
-// function swapPositions(idToSwap, currentIds, isUp) {
-//   let previousIndex = 0
-//   currentIds.forEach((id, idx) => {
-//     if (id === idToSwap) {
-//       previousIndex = idx
-//     }
-//   })
-//   const targetIndex = previousIndex + (isUp ? -1 : 1)
-//   const clone = [...currentIds]
-//   clone[previousIndex] = currentIds[targetIndex]
-//   clone[targetIndex] = currentIds[previousIndex]
-
-//   return clone
-// }
 
 interface ItemPositionProviderProps {
 	initialItems: Item[]
 }
 
-interface SortPosition {
+interface ItemPosition {
 	currentIndex: number
 	isPinned: boolean
 	id: string
 }
 
 interface ItemPositionMap {
-	[id: string]: SortPosition
+	[id: string]: ItemPosition
 }
 
 interface ItemPositionProviderState {
@@ -162,13 +147,19 @@ export class ItemPositionProvider extends React.Component<
 		})
 	}
 
+	handleGetItemPosition = (id: string) => {
+		return this.state.positionState[id]
+	}
+
 	render() {
 		return (
 			<ItemPositionContext.Provider
 				value={{
 					randomizeOrder: this.handleRandomizeOrder,
 					swapItem: this.handleSwapItem,
-					itemIds: this.state.itemIds
+					itemIds: this.state.itemIds,
+					getItemPositionById: this.handleGetItemPosition,
+					pinItem: this.handlePinItem
 				}}
 			>
 				{this.props.children}

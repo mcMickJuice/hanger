@@ -20,7 +20,6 @@ const Card = ({ children }: { children: any }) => {
 }
 
 function ReorderThing() {
-	// const [ids, updateIds] = React.useState(originalIds)
 	const { randomizeOrder, itemIds } = React.useContext(ItemPositionContext)
 
 	// no idea what this typing is doing..but this gets typescrpt to shutup
