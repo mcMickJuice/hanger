@@ -1,12 +1,12 @@
 import React from 'react'
-import ItemContext from './ItemContext'
+import ItemPositionContext from './ItemPositionContext'
 
 interface CardActionProps {
 	itemId: string
 }
 
 const CardActions = ({ itemId }: CardActionProps) => {
-	const { swapItem } = React.useContext(ItemContext)
+	const { swapItem } = React.useContext(ItemPositionContext)
 
 	return (
 		<div>

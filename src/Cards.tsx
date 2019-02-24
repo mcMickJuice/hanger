@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTransition, animated } from 'react-spring'
-import ItemContext from './ItemContext'
+import ItemPositionContext from './ItemPositionContext'
 import CardActions from './CardActions'
 
 const cardHeight = 70
@@ -21,7 +21,7 @@ const Card = ({ children }: { children: any }) => {
 
 function ReorderThing() {
 	// const [ids, updateIds] = React.useState(originalIds)
-	const { randomizeOrder, itemIds } = React.useContext(ItemContext)
+	const { randomizeOrder, itemIds } = React.useContext(ItemPositionContext)
 
 	// no idea what this typing is doing..but this gets typescrpt to shutup
 	const transitions = useTransition<

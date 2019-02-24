@@ -1,7 +1,7 @@
 import React from 'react'
 import { Item } from './types'
 
-interface ItemContextType {
+interface ItemPositionContextType {
 	// pinItem: (id: string) => void
 	randomizeOrder: () => void
 	swapItem: (id: string, isUp: boolean) => void
@@ -9,7 +9,7 @@ interface ItemContextType {
 	// getItemById: (id: string) => Item
 }
 
-const ItemContext = React.createContext<ItemContextType>({
+const ItemPositionContext = React.createContext<ItemPositionContextType>({
 	// pinItem: (_: string) => {
 	// 	throw new Error('pin item called')
 	// },
@@ -25,7 +25,7 @@ const ItemContext = React.createContext<ItemContextType>({
 	// }
 })
 
-export default ItemContext
+export default ItemPositionContext
 
 // function swapPositions(idToSwap, currentIds, isUp) {
 //   let previousIndex = 0
@@ -42,7 +42,7 @@ export default ItemContext
 //   return clone
 // }
 
-interface ItemProviderProps {
+interface ItemPositionProviderProps {
 	initialItems: Item[]
 }
 
@@ -56,7 +56,7 @@ interface ItemPositionMap {
 	[id: string]: SortPosition
 }
 
-interface ItemProviderState {
+interface ItemPositionProviderState {
 	positionState: ItemPositionMap
 	itemIds: string[]
 	items: Item[]
@@ -71,11 +71,11 @@ const getItemIdsFromCurrentPositions = (
 		})
 		.map(([key]) => key)
 
-export class ItemProvider extends React.Component<
-	ItemProviderProps,
-	ItemProviderState
+export class ItemPositionProvider extends React.Component<
+	ItemPositionProviderProps,
+	ItemPositionProviderState
 > {
-	constructor(props: ItemProviderProps) {
+	constructor(props: ItemPositionProviderProps) {
 		super(props)
 
 		const cache: ItemPositionMap = {}
@@ -164,7 +164,7 @@ export class ItemProvider extends React.Component<
 
 	render() {
 		return (
-			<ItemContext.Provider
+			<ItemPositionContext.Provider
 				value={{
 					randomizeOrder: this.handleRandomizeOrder,
 					swapItem: this.handleSwapItem,
@@ -172,7 +172,7 @@ export class ItemProvider extends React.Component<
 				}}
 			>
 				{this.props.children}
-			</ItemContext.Provider>
+			</ItemPositionContext.Provider>
 		)
 	}
 }

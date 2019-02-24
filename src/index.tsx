@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ItemProvider } from './ItemContext'
-import ReorderThing from './ReorderThing'
+import { ItemPositionProvider } from './ItemPositionContext'
+import Cards from './Cards'
 
 const items = [
 	{ id: '1', text: 'First Item' },
@@ -15,9 +15,9 @@ const items = [
 
 const App = () => {
 	return (
-		<ItemProvider initialItems={items}>
-			<ReorderThing />
-		</ItemProvider>
+		<ItemPositionProvider initialItems={items}>
+			<Cards />
+		</ItemPositionProvider>
 	)
 }
 
