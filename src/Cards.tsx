@@ -20,8 +20,8 @@ const Card = ({ children }: { children: any }) => {
 	)
 }
 
-function ReorderThing() {
-	const { randomizeOrder, itemIds } = React.useContext(PositionContext)
+function Cards() {
+	const { itemIds } = React.useContext(PositionContext)
 
 	// no idea what this typing is doing..but this gets typescrpt to shutup
 	const transitions = useTransition<
@@ -48,7 +48,6 @@ function ReorderThing() {
 
 	return (
 		<div style={{ width: '300px' }}>
-			<button onClick={randomizeOrder}>Randomize</button>
 			<div>
 				{transitions.map(({ item, key, props: { y, ...rest } }, idx) => {
 					return (
@@ -75,4 +74,4 @@ function ReorderThing() {
 	)
 }
 
-export default ReorderThing
+export default Cards

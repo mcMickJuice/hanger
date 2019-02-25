@@ -6,13 +6,14 @@ interface CardActionProps {
 }
 
 const CardActions = ({ itemId }: CardActionProps) => {
-	const {
-		swapItem,
-		getPositionById: getItemPositionById,
-		itemIds,
-		pinItem
-	} = React.useContext(PositionContext)
-	const position = getItemPositionById(itemId)
+	const { swapItem, getPositionById, itemIds, pinItem } = React.useContext(
+		PositionContext
+	)
+	const position = getPositionById(itemId)
+
+	// TODO: this is workaround for null reference on
+	// meal plan update
+	if (position == null) return null
 
 	return (
 		<div>

@@ -6,7 +6,7 @@ interface PositionContextType {
 	randomizeOrder: () => void
 	swapItem: (id: string, isUp: boolean) => void
 	itemIds: string[]
-	getPositionById: (id: string) => Position
+	getPositionById: (id: string) => Position | undefined
 }
 
 export interface Position {
@@ -38,7 +38,7 @@ const PositionContext = React.createContext<PositionContextType>({
 export default PositionContext
 
 interface PositionProviderProps {
-	initialItems: { id: string }[]
+	items: { id: string }[]
 }
 
 interface PositionProviderState {
@@ -63,7 +63,7 @@ export class PositionProvider extends React.Component<
 		super(props)
 
 		const cache: PositionMap = {}
-		const positionState = props.initialItems.reduce((acc, next, idx) => {
+		const positionState = props.items.reduce((acc, next, idx) => {
 			acc[next.id] = { currentIndex: idx, isPinned: false, id: next.id }
 			return acc
 		}, cache)
@@ -71,6 +71,21 @@ export class PositionProvider extends React.Component<
 		this.state = {
 			positionState,
 			itemIds: getIdsFromCurrentPositions(positionState)
+		}
+	}
+
+	componentDidUpdate(prevProps: PositionProviderProps) {
+		if (prevProps.items !== this.props.items) {
+			const cache: PositionMap = {}
+			const positionState = this.props.items.reduce((acc, next, idx) => {
+				acc[next.id] = { currentIndex: idx, isPinned: false, id: next.id }
+				return acc
+			}, cache)
+
+			this.setState({
+				positionState,
+				itemIds: getIdsFromCurrentPositions(positionState)
+			})
 		}
 	}
 
