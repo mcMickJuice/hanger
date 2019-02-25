@@ -1,5 +1,6 @@
 import React from 'react'
-import { Item } from './types'
+import { Item, ItemPositionMap, ItemPosition } from './types'
+import { generateOrderWithPinned } from './sort_utility'
 
 interface ItemPositionContextType {
 	pinItem: (id: string) => void
@@ -31,21 +32,13 @@ interface ItemPositionProviderProps {
 	initialItems: Item[]
 }
 
-interface ItemPosition {
-	currentIndex: number
-	isPinned: boolean
-	id: string
-}
-
-interface ItemPositionMap {
-	[id: string]: ItemPosition
-}
-
 interface ItemPositionProviderState {
 	positionState: ItemPositionMap
 	itemIds: string[]
 	items: Item[]
 }
+
+const randomSort = (): 1 | -1 => (Math.random() > 0.2 ? 1 : -1)
 
 const getItemIdsFromCurrentPositions = (
 	positionState: ItemPositionMap
@@ -77,18 +70,36 @@ export class ItemPositionProvider extends React.Component<
 	}
 
 	handleRandomizeOrder = () => {
-		const items = this.state.items.slice(0).sort(() => {
-			return Math.random() > 0.5 ? 1 : -1
-		})
-
-		const cache: ItemPositionMap = {}
-
 		const { positionState } = this.state
-		const newPositionState = items.reduce((acc, next, idx) => {
-			const currentPosition = positionState[next.id]
-			acc[next.id] = { ...currentPosition, currentIndex: idx, id: next.id }
-			return acc
-		}, cache)
+		const positions = Object.values(positionState)
+		const pinnedPositions = positions
+			.filter(p => p.isPinned)
+			.map(p => {
+				return {
+					index: p.currentIndex,
+					item: p.id
+				}
+			})
+		const nonPinnedPositions = positions
+			.filter(p => !p.isPinned)
+			.map(p => p.id)
+			.sort(randomSort)
+
+		const sortedIds = generateOrderWithPinned(
+			nonPinnedPositions,
+			pinnedPositions
+		)
+
+		console.log(sortedIds)
+
+		const newPositionState: ItemPositionMap = {}
+		sortedIds.forEach((id, idx) => {
+			const position = positionState[id]
+			newPositionState[id] = {
+				...position,
+				currentIndex: idx
+			}
+		})
 
 		this.setState({
 			positionState: newPositionState,
