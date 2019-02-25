@@ -3,7 +3,7 @@ import PositionContext from './PositionContext'
 import MealPlanContext from './MealPlanContext'
 import { Meal } from './types'
 
-const dbMeals: Meal[] = Array.from({ length: 20 }, (_, idx) => idx).map(i => ({
+const dbMeals: Meal[] = Array.from({ length: 12 }, (_, idx) => idx).map(i => ({
 	id: i.toString(),
 	name: `Item number ${i}`
 }))

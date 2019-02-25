@@ -39,8 +39,8 @@ function Cards() {
 			return d.id
 		},
 		{
-			from: { height: 0, y: 0 },
-			leave: { height: 0, y: 0 },
+			from: { height: 0, y: 0, opacity: 1 },
+			leave: { opacity: 0 },
 			enter: ({ y, id }: { y: number; id: string }) => ({ y, id }),
 			update: ({ y, id }: { y: number; id: string }) => ({ y, id })
 		} as any
