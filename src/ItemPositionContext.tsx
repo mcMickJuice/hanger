@@ -35,10 +35,9 @@ interface ItemPositionProviderProps {
 interface ItemPositionProviderState {
 	positionState: ItemPositionMap
 	itemIds: string[]
-	items: Item[]
 }
 
-const randomSort = (): 1 | -1 => (Math.random() > 0.2 ? 1 : -1)
+const randomSort = (): 1 | -1 => (Math.random() > 0.5 ? 1 : -1)
 
 const getItemIdsFromCurrentPositions = (
 	positionState: ItemPositionMap
@@ -63,7 +62,6 @@ export class ItemPositionProvider extends React.Component<
 		}, cache)
 
 		this.state = {
-			items: props.initialItems,
 			positionState,
 			itemIds: getItemIdsFromCurrentPositions(positionState)
 		}
