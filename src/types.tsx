@@ -1,4 +1,4 @@
-export interface Item {
+export interface Meal {
 	id: string
-	text: string
+	name: string
 }

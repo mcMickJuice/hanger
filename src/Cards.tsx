@@ -2,6 +2,7 @@ import React from 'react'
 import { useTransition, animated } from 'react-spring'
 import PositionContext from './PositionContext'
 import CardActions from './CardActions'
+import MealCard from './MealCard'
 
 const cardHeight = 70
 const gap = 20
@@ -62,7 +63,7 @@ function ReorderThing() {
 								<div
 									style={{ display: 'flex', justifyContent: 'space-between' }}
 								>
-									<div>{item.id}</div>
+									<MealCard id={item.id} />
 									<CardActions itemId={item.id} />
 								</div>
 							</Card>

@@ -1,5 +1,4 @@
 import React from 'react'
-import { Item } from './types'
 import { generateOrderWithPinned } from './sort_utility'
 
 interface PositionContextType {
@@ -39,7 +38,7 @@ const PositionContext = React.createContext<PositionContextType>({
 export default PositionContext
 
 interface PositionProviderProps {
-	initialItems: Item[]
+	initialItems: { id: string }[]
 }
 
 interface PositionProviderState {
