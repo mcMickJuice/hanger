@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ItemPositionProvider } from './ItemPositionContext'
+import { PositionProvider } from './PositionContext'
 import Cards from './Cards'
 
 const items = [
@@ -15,9 +15,9 @@ const items = [
 
 const App = () => {
 	return (
-		<ItemPositionProvider initialItems={items}>
+		<PositionProvider initialItems={items}>
 			<Cards />
-		</ItemPositionProvider>
+		</PositionProvider>
 	)
 }
 

@@ -1,14 +1,17 @@
 import React from 'react'
-import ItemPositionContext from './ItemPositionContext'
+import PositionContext from './PositionContext'
 
 interface CardActionProps {
 	itemId: string
 }
 
 const CardActions = ({ itemId }: CardActionProps) => {
-	const { swapItem, getItemPositionById, itemIds, pinItem } = React.useContext(
-		ItemPositionContext
-	)
+	const {
+		swapItem,
+		getPositionById: getItemPositionById,
+		itemIds,
+		pinItem
+	} = React.useContext(PositionContext)
 	const position = getItemPositionById(itemId)
 
 	return (

@@ -1,16 +1,26 @@
 import React from 'react'
-import { Item, ItemPositionMap, ItemPosition } from './types'
+import { Item } from './types'
 import { generateOrderWithPinned } from './sort_utility'
 
-interface ItemPositionContextType {
+interface PositionContextType {
 	pinItem: (id: string) => void
 	randomizeOrder: () => void
 	swapItem: (id: string, isUp: boolean) => void
 	itemIds: string[]
-	getItemPositionById: (id: string) => ItemPosition
+	getPositionById: (id: string) => Position
 }
 
-const ItemPositionContext = React.createContext<ItemPositionContextType>({
+export interface Position {
+	currentIndex: number
+	isPinned: boolean
+	id: string
+}
+
+export interface PositionMap {
+	[id: string]: Position
+}
+
+const PositionContext = React.createContext<PositionContextType>({
 	pinItem: (_: string) => {
 		throw new Error('pin item called')
 	},
@@ -21,41 +31,39 @@ const ItemPositionContext = React.createContext<ItemPositionContextType>({
 		throw new Error('swapItem called')
 	},
 	itemIds: [],
-	getItemPositionById: (_: string) => {
+	getPositionById: (_: string) => {
 		throw new Error('item by id called')
 	}
 })
 
-export default ItemPositionContext
+export default PositionContext
 
-interface ItemPositionProviderProps {
+interface PositionProviderProps {
 	initialItems: Item[]
 }
 
-interface ItemPositionProviderState {
-	positionState: ItemPositionMap
+interface PositionProviderState {
+	positionState: PositionMap
 	itemIds: string[]
 }
 
 const randomSort = (): 1 | -1 => (Math.random() > 0.5 ? 1 : -1)
 
-const getItemIdsFromCurrentPositions = (
-	positionState: ItemPositionMap
-): string[] =>
+const getIdsFromCurrentPositions = (positionState: PositionMap): string[] =>
 	Object.entries(positionState)
 		.sort((first, second) => {
 			return first[1].currentIndex - second[1].currentIndex
 		})
 		.map(([key]) => key)
 
-export class ItemPositionProvider extends React.Component<
-	ItemPositionProviderProps,
-	ItemPositionProviderState
+export class PositionProvider extends React.Component<
+	PositionProviderProps,
+	PositionProviderState
 > {
-	constructor(props: ItemPositionProviderProps) {
+	constructor(props: PositionProviderProps) {
 		super(props)
 
-		const cache: ItemPositionMap = {}
+		const cache: PositionMap = {}
 		const positionState = props.initialItems.reduce((acc, next, idx) => {
 			acc[next.id] = { currentIndex: idx, isPinned: false, id: next.id }
 			return acc
@@ -63,7 +71,7 @@ export class ItemPositionProvider extends React.Component<
 
 		this.state = {
 			positionState,
-			itemIds: getItemIdsFromCurrentPositions(positionState)
+			itemIds: getIdsFromCurrentPositions(positionState)
 		}
 	}
 
@@ -88,9 +96,7 @@ export class ItemPositionProvider extends React.Component<
 			pinnedPositions
 		)
 
-		console.log(sortedIds)
-
-		const newPositionState: ItemPositionMap = {}
+		const newPositionState: PositionMap = {}
 		sortedIds.forEach((id, idx) => {
 			const position = positionState[id]
 			newPositionState[id] = {
@@ -101,7 +107,7 @@ export class ItemPositionProvider extends React.Component<
 
 		this.setState({
 			positionState: newPositionState,
-			itemIds: getItemIdsFromCurrentPositions(newPositionState)
+			itemIds: getIdsFromCurrentPositions(newPositionState)
 		})
 	}
 
@@ -135,7 +141,7 @@ export class ItemPositionProvider extends React.Component<
 
 		this.setState({
 			positionState: newPositionState,
-			itemIds: getItemIdsFromCurrentPositions(newPositionState)
+			itemIds: getIdsFromCurrentPositions(newPositionState)
 		})
 	}
 
@@ -143,7 +149,7 @@ export class ItemPositionProvider extends React.Component<
 		const { positionState } = this.state
 		const positionItemToUpdate = positionState[id]
 
-		const newPositionState: ItemPositionMap = {
+		const newPositionState: PositionMap = {
 			...positionState,
 			[id]: {
 				...positionItemToUpdate,
@@ -162,17 +168,17 @@ export class ItemPositionProvider extends React.Component<
 
 	render() {
 		return (
-			<ItemPositionContext.Provider
+			<PositionContext.Provider
 				value={{
 					randomizeOrder: this.handleRandomizeOrder,
 					swapItem: this.handleSwapItem,
 					itemIds: this.state.itemIds,
-					getItemPositionById: this.handleGetItemPosition,
+					getPositionById: this.handleGetItemPosition,
 					pinItem: this.handlePinItem
 				}}
 			>
 				{this.props.children}
-			</ItemPositionContext.Provider>
+			</PositionContext.Provider>
 		)
 	}
 }
