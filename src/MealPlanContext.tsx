@@ -44,7 +44,6 @@ export class MealProvider extends React.Component<{}, MealProviderState> {
 		return this.state.meals
 	}
 	loadMeals = (meals: Meal[]) => {
-		console.log('loading meals', meals)
 		this.setState({
 			meals
 		})

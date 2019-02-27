@@ -7,6 +7,7 @@ interface PositionContextType {
 	swapItem: (id: string, isUp: boolean) => void
 	itemIds: string[]
 	getPositionById: (id: string) => Position | undefined
+	getPinnedItems: () => string[]
 }
 
 export interface Position {
@@ -32,6 +33,9 @@ const PositionContext = React.createContext<PositionContextType>({
 	itemIds: [],
 	getPositionById: (_: string) => {
 		throw new Error('item by id called')
+	},
+	getPinnedItems: () => {
+		throw new Error('getPinnedItems calls')
 	}
 })
 
@@ -76,15 +80,59 @@ export class PositionProvider extends React.Component<
 
 	componentDidUpdate(prevProps: PositionProviderProps) {
 		if (prevProps.items !== this.props.items) {
-			const cache: PositionMap = {}
-			const positionState = this.props.items.reduce((acc, next, idx) => {
-				acc[next.id] = { currentIndex: idx, isPinned: false, id: next.id }
-				return acc
-			}, cache)
+			console.log('updating!')
+			const pinnedMeals = this.props.items
+				.filter(item => {
+					const position = this.state.positionState[item.id]
+					return position != null && position.isPinned
+				})
+				.map(item => {
+					const position = this.state.positionState[item.id]
+					return {
+						index: position.currentIndex,
+						item: item.id
+					}
+				})
+			const nonPinned = this.props.items
+				.filter(item => {
+					const position = this.state.positionState[item.id]
+					return position == null || !position.isPinned
+				})
+				.map(item => item.id)
+
+			const sortedIds = generateOrderWithPinned(nonPinned, pinnedMeals)
+
+			const newPositionState: PositionMap = {}
+			sortedIds.forEach((id, idx) => {
+				const position = this.state.positionState[id]
+				if (position == null) {
+					newPositionState[id] = {
+						isPinned: false,
+						id,
+						currentIndex: idx
+					}
+				} else {
+					newPositionState[id] = {
+						...position,
+						currentIndex: idx
+					}
+				}
+			})
+			const currentIndexes = Object.values(newPositionState).map(
+				r => r.currentIndex
+			)
+			const cache = {} as any
+			currentIndexes.forEach(i => {
+				if (cache[i] != null) {
+					console.log(newPositionState)
+					throw new Error('Invariant: duplicate indices')
+				}
+				cache[i] = true
+			})
 
 			this.setState({
-				positionState,
-				itemIds: getIdsFromCurrentPositions(positionState)
+				positionState: newPositionState,
+				itemIds: getIdsFromCurrentPositions(newPositionState)
 			})
 		}
 	}
@@ -180,6 +228,12 @@ export class PositionProvider extends React.Component<
 		return this.state.positionState[id]
 	}
 
+	handleGetPinnedItems = () => {
+		return Object.values(this.state.positionState)
+			.filter(p => p.isPinned)
+			.map(p => p.id)
+	}
+
 	render() {
 		return (
 			<PositionContext.Provider
@@ -188,7 +242,8 @@ export class PositionProvider extends React.Component<
 					swapItem: this.handleSwapItem,
 					itemIds: this.state.itemIds,
 					getPositionById: this.handleGetItemPosition,
-					pinItem: this.handlePinItem
+					pinItem: this.handlePinItem,
+					getPinnedItems: this.handleGetPinnedItems
 				}}
 			>
 				{this.props.children}

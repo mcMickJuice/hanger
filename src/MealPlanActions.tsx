@@ -3,20 +3,24 @@ import PositionContext from './PositionContext'
 import MealPlanContext from './MealPlanContext'
 import { Meal } from './types'
 
-const dbMeals: Meal[] = Array.from({ length: 12 }, (_, idx) => idx).map(i => ({
+const dbMeals: Meal[] = Array.from({ length: 50 }, (_, idx) => idx).map(i => ({
 	id: i.toString(),
 	name: `Item number ${i}`
 }))
 
 const useFetchMealPlans = () => {
+	const { getPinnedItems } = React.useContext(PositionContext)
 	const [meals, updateMeals] = React.useState<Meal[]>([])
 
 	function generateNewMealPlan() {
+		const pinnedItemIds = getPinnedItems()
+		const pinnedMeals = dbMeals.filter(db => pinnedItemIds.includes(db.id))
 		const newMeals = dbMeals
+			.filter(db => !pinnedItemIds.includes(db.id))
 			.sort(() => (Math.random() > 0.5 ? 1 : -1))
-			.slice(0, 7)
+			.slice(0, 7 - pinnedItemIds.length)
 
-		updateMeals(newMeals)
+		updateMeals([...pinnedMeals, ...newMeals])
 	}
 
 	return { meals, generateNewMealPlan }
