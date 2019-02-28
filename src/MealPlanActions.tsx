@@ -2,17 +2,14 @@ import React from 'react'
 import PositionContext from './PositionContext'
 import MealPlanContext from './MealPlanContext'
 import { Meal } from './types'
-
-const dbMeals: Meal[] = Array.from({ length: 50 }, (_, idx) => idx).map(i => ({
-	id: i.toString(),
-	name: `Item number ${i}`
-}))
+import { fetchMeals } from './meal_service'
 
 const useFetchMealPlans = () => {
 	const { getPinnedItems } = React.useContext(PositionContext)
 	const [meals, updateMeals] = React.useState<Meal[]>([])
 
-	function generateNewMealPlan() {
+	async function generateNewMealPlan() {
+		const dbMeals = await fetchMeals()
 		const pinnedItemIds = getPinnedItems()
 		const pinnedMeals = dbMeals.filter(db => pinnedItemIds.includes(db.id))
 		const newMeals = dbMeals

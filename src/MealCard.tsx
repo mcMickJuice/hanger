@@ -14,7 +14,7 @@ const MealCard = ({ id }: MealCardProps) => {
 	// meal plan update
 	if (meal == null) return null
 
-	return <div>Meal - {meal.name}</div>
+	return <div>{meal.mealName}</div>
 }
 
 export default MealCard
