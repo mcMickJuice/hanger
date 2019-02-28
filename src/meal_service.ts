@@ -15,16 +15,8 @@ interface MealTableResponse {
 }
 
 export async function fetchMeals(): Promise<Meal[]> {
-	const url = '/meals'
-	const result = await Axios.get<MealTableResponse>(url)
+	const url = '/.netlify/functions/meals'
+	const result = await Axios.get<Meal[]>(url)
 
-	const meals: Meal[] = result.data.records.map(r => {
-		const { id, ...rest } = r.fields
-		return {
-			...rest,
-			id: r.id
-		}
-	})
-
-	return meals
+	return result.data
 }
