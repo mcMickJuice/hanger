@@ -80,7 +80,6 @@ export class PositionProvider extends React.Component<
 
 	componentDidUpdate(prevProps: PositionProviderProps) {
 		if (prevProps.items !== this.props.items) {
-			console.log('updating!')
 			const pinnedMeals = this.props.items
 				.filter(item => {
 					const position = this.state.positionState[item.id]
