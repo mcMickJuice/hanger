@@ -1,14 +1,8 @@
-const Axios = require('axios')
-
-const apiKey = process.env.AIR_TABLE_API_KEY
-const mealsTableUrl = process.env.MEALS_TABLE_URL
-
-const config = {
-	headers: { Authorization: `Bearer ${apiKey}` }
-}
+const { get } = require('./http_client')
+const { mealsTableUrl } = require('./api_config')
 
 export function handler(_, __, callback) {
-	Axios.get(mealsTableUrl, config).then(result => {
+	get(mealsTableUrl).then(result => {
 		const meals = result.data.records.map(r => {
 			const { id, ...rest } = r.fields
 			return {
