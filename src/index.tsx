@@ -1,9 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import MealPlanPage from './MealPlanPage'
+// import MealPlanPage from './MealPlanPage'
+import MealSelectPage from './pages/MealSelect/MealSelectPage'
 
 const App = () => {
-	return <MealPlanPage />
+	return <MealSelectPage maxNumberOfMeals={7} />
 }
 
 const rootElement = document.getElementById('root')
