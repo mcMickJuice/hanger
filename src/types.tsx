@@ -25,4 +25,5 @@ export interface Meal {
 	mealName: string
 	persuasion: Persuasion
 	protein: Protein
+	health: Health
 }
