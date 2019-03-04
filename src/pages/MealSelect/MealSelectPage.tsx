@@ -8,14 +8,6 @@ enum ActionType {
 	LoadNewSuggestions = 'LoadNewSuggestions'
 }
 
-/**
- * 1. get random meals for ideas (regardless of count)
- * 2. keep meals for use in meal plan
- * 3. unkeep meals
- * 4. show kept meals in bottom of screen
- * 5. proceed to meal plan screen
- */
-
 type Action = KeepMealAction | UnkeepMealAction | LoadNewSuggestionsAction
 
 interface KeepMealAction {
@@ -71,6 +63,28 @@ const reducer = (state: State, action: Action): State => {
 		default:
 			return state
 	}
+}
+
+interface MealTileProps {
+	style: React.CSSProperties
+	children: React.ReactNode
+	onClick: () => void
+}
+
+const MealTile = ({ style, children, onClick }: MealTileProps) => {
+	return (
+		<div
+			style={{
+				width: '25%',
+				margin: '8px',
+				padding: '8px',
+				...style
+			}}
+			onClick={onClick}
+		>
+			{children}
+		</div>
+	)
 }
 
 const MealSelectPage = (props: Props) => {
@@ -138,12 +152,10 @@ const MealSelectPage = (props: Props) => {
 					{state.suggestedMealIds.map(id => {
 						const isSelected = state.keptMealIds.includes(id)
 						return (
-							<div
+							<MealTile
 								style={{
-									width: '25%',
 									backgroundColor: 'tomato',
-									margin: '8px',
-									padding: '16px',
+
 									opacity: isSelected ? 0.4 : 1,
 									cursor: isSelected ? 'not-allowed' : 'pointer'
 								}}
@@ -154,7 +166,7 @@ const MealSelectPage = (props: Props) => {
 								}}
 							>
 								<MealChip mealId={id} />
-							</div>
+							</MealTile>
 						)
 					})}
 				</div>
@@ -168,12 +180,9 @@ const MealSelectPage = (props: Props) => {
 					}}
 				>
 					{state.keptMealIds.map(id => (
-						<div
+						<MealTile
 							style={{
-								width: '25%',
-								backgroundColor: 'goldenrod',
-								margin: '8px',
-								padding: '16px'
+								backgroundColor: 'goldenrod'
 							}}
 							key={id}
 							onClick={() => {
@@ -181,7 +190,7 @@ const MealSelectPage = (props: Props) => {
 							}}
 						>
 							<MealChip mealId={id} />
-						</div>
+						</MealTile>
 					))}
 				</div>
 			</div>
