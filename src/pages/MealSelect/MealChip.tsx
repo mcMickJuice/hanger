@@ -35,11 +35,7 @@ interface MealChipProps {
 const MealChip = ({ mealId }: MealChipProps) => {
 	const { meal } = useMeal(mealId)
 
-	return meal == null ? null : (
-		<div>
-			Meal - {meal.id} - {meal.mealName}
-		</div>
-	)
+	return meal == null ? null : <div>{meal.mealName}</div>
 }
 
 export default MealChip

@@ -129,24 +129,52 @@ const MealSelectPage = (props: Props) => {
 			</div>
 			<div>
 				<h3>Suggestions</h3>
-				<div>
-					{state.suggestedMealIds.map(id => (
-						<div
-							key={id}
-							onClick={() => {
-								handleKeepMeal(id)
-							}}
-						>
-							<MealChip mealId={id} />
-						</div>
-					))}
+				<div
+					style={{
+						display: 'flex',
+						flexWrap: 'wrap'
+					}}
+				>
+					{state.suggestedMealIds.map(id => {
+						const isSelected = state.keptMealIds.includes(id)
+						return (
+							<div
+								style={{
+									width: '25%',
+									backgroundColor: 'tomato',
+									margin: '8px',
+									padding: '16px',
+									opacity: isSelected ? 0.4 : 1,
+									cursor: isSelected ? 'not-allowed' : 'pointer'
+								}}
+								key={id}
+								onClick={() => {
+									if (isSelected) return
+									handleKeepMeal(id)
+								}}
+							>
+								<MealChip mealId={id} />
+							</div>
+						)
+					})}
 				</div>
 			</div>
 			<div>
 				<h3>Kept Meal Ids</h3>
-				<div>
+				<div
+					style={{
+						display: 'flex',
+						flexWrap: 'wrap'
+					}}
+				>
 					{state.keptMealIds.map(id => (
 						<div
+							style={{
+								width: '25%',
+								backgroundColor: 'goldenrod',
+								margin: '8px',
+								padding: '16px'
+							}}
 							key={id}
 							onClick={() => {
 								handleUnkeepMeal(id)
