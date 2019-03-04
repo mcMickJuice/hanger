@@ -1,22 +1,98 @@
 import Axios from 'axios'
-import { Meal, Health, Persuasion, Protein } from './types'
+import { Meal } from './types'
 
-interface MealTableResponse {
-	records: Array<{
-		fields: {
-			health: Health
-			mealName: string
-			persuasion: Persuasion
-			protein: Protein
-			id: number
+function partition<T>(
+	collection: T[],
+	condition: (item: T) => boolean
+): [T[], T[]] {
+	const unFound: T[] = []
+	const found: T[] = []
+	collection.forEach(item => {
+		if (condition(item)) {
+			found.push(item)
+		} else {
+			unFound.push(item)
 		}
-		id: string
-	}>
+	})
+
+	return [found, unFound]
 }
 
+const cache: {
+	[mealId: string]: Meal
+} = {}
+
+function cacheMeal(meal: Meal) {
+	cache[meal.id] = meal
+}
+
+function getMealFromCache(mealId: string): Meal | undefined {
+	return cache[mealId]
+}
+
+const baseUrl = '/.netlify/functions'
+
 export async function fetchMeals(): Promise<Meal[]> {
-	const url = '/.netlify/functions/meals'
+	const url = `${baseUrl}/meals`
 	const result = await Axios.get<Meal[]>(url)
 
+	// TODO: cache this ish?
+
 	return result.data
+}
+
+export async function fetchMealSuggestions(
+	limit: number,
+	excludeMealIds: string[]
+): Promise<string[]> {
+	const meals = await fetchMeals()
+
+	const suggestedMeals = meals
+		// TODO: should we have this logic of filtering and randomizing on the server?
+		.filter(meal => !excludeMealIds.includes(meal.id))
+		.sort(() => (Math.random() > 0.5 ? 1 : -1))
+		.slice(0, limit)
+
+	suggestedMeals.forEach(meal => cacheMeal(meal))
+
+	return suggestedMeals.map(meal => meal.id)
+}
+
+export async function getMealById(mealId: string): Promise<Meal> {
+	const foundMeal = getMealFromCache(mealId)
+
+	if (foundMeal != null) {
+		return foundMeal
+	}
+
+	const url = `${baseUrl}/mealById?mealId=${mealId}`
+	const result = await Axios.get<Meal>(url)
+	const meal = result.data
+	cache[mealId] = meal
+
+	return meal
+}
+
+export async function getMealsById(mealIds: string[]): Promise<Meal[]> {
+	const [foundIds, notFoundIds] = partition(mealIds, id => cache[id] != null)
+
+	const foundMeals = foundIds.map(id => {
+		// these are in the cache, don't worry
+		return getMealFromCache(id) as Meal
+	})
+
+	if (notFoundIds.length === 0) {
+		return foundMeals
+	}
+
+	const mealIdsParams = notFoundIds.map(id => `mealIds=${id}`).join('&')
+
+	const url = `${baseUrl}/meals?${mealIdsParams}`
+	const response = await Axios.get<Meal[]>(url)
+
+	const fetchedMeals = response.data
+
+	fetchedMeals.forEach(meal => cacheMeal(meal))
+
+	return [...foundMeals, ...fetchedMeals]
 }
