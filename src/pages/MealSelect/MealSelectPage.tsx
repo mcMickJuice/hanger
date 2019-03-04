@@ -65,13 +65,15 @@ const reducer = (state: State, action: Action): State => {
 	}
 }
 
-interface MealTileProps {
+const MealTile = ({
+	style,
+	children,
+	onClick
+}: {
 	style: React.CSSProperties
 	children: React.ReactNode
 	onClick: () => void
-}
-
-const MealTile = ({ style, children, onClick }: MealTileProps) => {
+}) => {
 	return (
 		<div
 			style={{
@@ -87,12 +89,29 @@ const MealTile = ({ style, children, onClick }: MealTileProps) => {
 	)
 }
 
+const MealTileGrid = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<div
+			style={{
+				display: 'flex',
+				flexWrap: 'wrap'
+			}}
+		>
+			{children}
+		</div>
+	)
+}
+
 const MealSelectPage = (props: Props) => {
 	const [state, dispatch] = React.useReducer(reducer, {
 		keptMealIds: [],
 		suggestedMealIds: []
 	})
 	const [isPendingSuggestions, setIsPendingSuggestions] = React.useState(false)
+
+	React.useEffect(() => {
+		handleLoadSuggestions()
+	}, [])
 
 	function handleKeepMeal(mealId: string) {
 		const action: KeepMealAction = {
@@ -136,19 +155,13 @@ const MealSelectPage = (props: Props) => {
 	return (
 		<div>
 			<div>
-				<h3>Actions</h3>
 				<button onClick={handleLoadSuggestions}>
-					{isPendingSuggestions ? 'Loading...' : 'Get Suggestions'}
+					{isPendingSuggestions ? 'Loading...' : 'Get More Suggestions'}
 				</button>
 			</div>
 			<div>
-				<h3>Suggestions</h3>
-				<div
-					style={{
-						display: 'flex',
-						flexWrap: 'wrap'
-					}}
-				>
+				<h3>Do you wanna eat...</h3>
+				<MealTileGrid>
 					{state.suggestedMealIds.map(id => {
 						const isSelected = state.keptMealIds.includes(id)
 						return (
@@ -169,38 +182,31 @@ const MealSelectPage = (props: Props) => {
 							</MealTile>
 						)
 					})}
+				</MealTileGrid>
+			</div>
+			{state.keptMealIds.length > 0 ? (
+				<div>
+					<h3>Can't wait to eat...</h3>
+					<MealTileGrid>
+						{state.keptMealIds.map(id => (
+							<MealTile
+								style={{
+									backgroundColor: '#60c564'
+								}}
+								key={id}
+								onClick={() => {
+									handleUnkeepMeal(id)
+								}}
+							>
+								<MealChip mealId={id} />
+							</MealTile>
+						))}
+					</MealTileGrid>
+					<button>Let's Plan our Eating!</button>
 				</div>
-			</div>
-			<div>
-				<h3>Kept Meal Ids</h3>
-				<div
-					style={{
-						display: 'flex',
-						flexWrap: 'wrap'
-					}}
-				>
-					{state.keptMealIds.map(id => (
-						<MealTile
-							style={{
-								backgroundColor: 'goldenrod'
-							}}
-							key={id}
-							onClick={() => {
-								handleUnkeepMeal(id)
-							}}
-						>
-							<MealChip mealId={id} />
-						</MealTile>
-					))}
-				</div>
-			</div>
-			<div>
-				{state.keptMealIds.length > 0 ? (
-					<button>Create Meal Plan</button>
-				) : (
-					<div>Select some meals above!</div>
-				)}
-			</div>
+			) : (
+				<div>Select some meals above!</div>
+			)}
 		</div>
 	)
 }
