@@ -26,15 +26,22 @@ const ShareMealPlan = ({ mealPlan }: Props) => {
 
 	function handleCopy() {
 		if (inputRef.current != null) {
+			inputRef.current.setAttribute('style', 'display: block;')
 			inputRef.current.select()
 			document.execCommand('copy')
+			inputRef.current.setAttribute('style', 'display: none;')
 		}
 	}
 
 	return (
 		<div>
 			<Button onClick={handleCopy}>Copy Share Url</Button>
-			<textarea readOnly value={url} ref={inputRef} />
+			<textarea
+				style={{ display: 'none' }}
+				readOnly
+				value={url}
+				ref={inputRef}
+			/>
 		</div>
 	)
 }
