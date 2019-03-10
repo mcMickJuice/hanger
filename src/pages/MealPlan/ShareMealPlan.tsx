@@ -21,6 +21,7 @@ function encodeMealPlanIntoUrl(mealPlan: MealPlan) {
 // encode that into url
 
 const ShareMealPlan = ({ mealPlan }: Props) => {
+	const [showCopyMessage, setShowCopyMessage] = React.useState(false)
 	const inputRef = React.useRef<HTMLTextAreaElement>(null)
 	const url = encodeMealPlanIntoUrl(mealPlan)
 
@@ -30,12 +31,20 @@ const ShareMealPlan = ({ mealPlan }: Props) => {
 			inputRef.current.select()
 			document.execCommand('copy')
 			inputRef.current.setAttribute('style', 'display: none;')
+
+			setShowCopyMessage(true)
+
+			setTimeout(() => {
+				setShowCopyMessage(false)
+			}, 3000)
 		}
 	}
 
 	return (
 		<div>
-			<Button onClick={handleCopy}>Copy Share Url</Button>
+			<Button onClick={handleCopy}>
+				{showCopyMessage ? 'URL Copied!' : 'Copy Share Url'}
+			</Button>
 			<textarea
 				style={{ display: 'none' }}
 				readOnly
