@@ -1,5 +1,5 @@
 import React from 'react'
-import { Meal } from './types'
+import { Meal } from '../../types'
 
 interface MealPlanContextType {
 	getMealById: (id: string) => Meal | undefined

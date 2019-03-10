@@ -1,8 +1,8 @@
 import React from 'react'
 import PositionContext from './PositionContext'
 import MealPlanContext from './MealPlanContext'
-import { Meal } from './types'
-import { fetchMeals } from './meal_service'
+import { Meal } from '../../types'
+import { fetchMeals } from '../../meal_service'
 
 const useFetchMealPlans = () => {
 	const { getPinnedItems } = React.useContext(PositionContext)

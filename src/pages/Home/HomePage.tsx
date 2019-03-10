@@ -15,6 +15,9 @@ const HomePage = () => {
 				<li>
 					<Link to="/plan/34384hfds">Select a plan</Link>
 				</li>
+				<li>
+					<Link to="/repositioning">Reorder feature (WIP)</Link>
+				</li>
 			</ul>
 		</div>
 	)

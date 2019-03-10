@@ -2,9 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 // import MealPlanPage from './MealPlanPage'
 import MealSelectPage from './pages/MealSelect/MealSelectPage'
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import HomePage from './pages/Home/HomePage'
 import MealPlanPage from './pages/MealPlan/MealPlanPage'
+import MealPositioningPage from './features/repositioning/MealPositioningPage'
 
 const App = () => {
 	return (
@@ -18,6 +19,7 @@ const App = () => {
 					component={() => <div>Meal Listing Page</div>}
 				/>
 				<Route path="/plan/:planId" exact component={MealPlanPage} />
+				<Route path="/repositioning" exact component={MealPositioningPage} />
 			</Switch>
 		</Router>
 	)

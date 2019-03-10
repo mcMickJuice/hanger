@@ -8,7 +8,7 @@ interface MealPlanPageState {
 	errorMessage: string
 }
 
-class MealPlanPage extends React.Component<{}, MealPlanPageState> {
+class MealPositioningPage extends React.Component<{}, MealPlanPageState> {
 	state: MealPlanPageState = {
 		errorMessage: ''
 	}
@@ -52,4 +52,4 @@ const MealPlanPositioner = () => {
 	)
 }
 
-export default MealPlanPage
+export default MealPositioningPage
