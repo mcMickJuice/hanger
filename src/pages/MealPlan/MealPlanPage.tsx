@@ -99,8 +99,7 @@ const MealPlanRender = ({ pageState }: { pageState: State }) => {
 
 			return (
 				<div>
-					{/* TODO: name of plan! */}
-					<h2>Meal - {plan.id}</h2>
+					<h2>Meal - {plan.planName}</h2>
 					{plan.mealIds.map(id => (
 						<div style={{ marginBottom: '8px' }} key={id}>
 							<Meal mealId={id} />

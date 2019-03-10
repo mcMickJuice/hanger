@@ -30,5 +30,6 @@ export interface Meal {
 
 export interface MealPlan {
 	id: string
+	planName: string
 	mealIds: string[]
 }

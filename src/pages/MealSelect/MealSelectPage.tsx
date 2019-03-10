@@ -1,9 +1,10 @@
 import React from 'react'
-import { fetchMealSuggestions, savePlan } from '../../meal_service'
+import { fetchMealSuggestions } from '../../meal_service'
 import MealChip from '../../shared/MealChip'
 import MealTileGrid from './MealTileGrid'
 import MealTile from './MealTile'
 import { RouteComponentProps } from 'react-router'
+import CreateMealPlanForm from './CreateMealForm'
 
 enum ActionType {
 	KeepMeal = 'KeepMeal',
@@ -74,6 +75,7 @@ const MealSelectPage = (props: RouteComponentProps) => {
 		suggestedMealIds: []
 	})
 	const [isPendingSuggestions, setIsPendingSuggestions] = React.useState(false)
+	const [isPendingCreate, setIsPendingCreate] = React.useState(false)
 
 	React.useEffect(() => {
 		handleLoadSuggestions()
@@ -118,11 +120,7 @@ const MealSelectPage = (props: RouteComponentProps) => {
 		dispatch(action)
 	}
 
-	async function handleSavePlan() {
-		const mealPlanId = await savePlan({
-			mealIds: state.keptMealIds
-		})
-
+	function handleSavePlan(mealPlanId: string) {
 		//navigate to meal Plan page
 		props.history.push(`/plan/${mealPlanId}`)
 	}
@@ -179,10 +177,20 @@ const MealSelectPage = (props: RouteComponentProps) => {
 					</MealTileGrid>
 					<button
 						disabled={state.keptMealIds.length === 0}
-						onClick={handleSavePlan}
+						onClick={() => setIsPendingCreate(true)}
 					>
 						Let's Plan our Eating!
 					</button>
+
+					{isPendingCreate ? (
+						<div>
+							<CreateMealPlanForm
+								onMealCreated={handleSavePlan}
+								mealIds={state.keptMealIds}
+							/>
+							<button onClick={() => setIsPendingCreate(false)}>Cancel</button>
+						</div>
+					) : null}
 				</div>
 			) : (
 				<div>Select some meals above!</div>
