@@ -1,6 +1,8 @@
 import React from 'react'
 import { fetchMealSuggestions, savePlan } from '../../meal_service'
 import MealChip from '../../shared/MealChip'
+import MealTileGrid from './MealTileGrid'
+import MealTile from './MealTile'
 
 enum ActionType {
 	KeepMeal = 'KeepMeal',
@@ -63,43 +65,6 @@ const reducer = (state: State, action: Action): State => {
 		default:
 			return state
 	}
-}
-
-const MealTile = ({
-	style,
-	children,
-	onClick
-}: {
-	style: React.CSSProperties
-	children: React.ReactNode
-	onClick: () => void
-}) => {
-	return (
-		<div
-			style={{
-				width: '25%',
-				margin: '8px',
-				padding: '8px',
-				...style
-			}}
-			onClick={onClick}
-		>
-			{children}
-		</div>
-	)
-}
-
-const MealTileGrid = ({ children }: { children: React.ReactNode }) => {
-	return (
-		<div
-			style={{
-				display: 'flex',
-				flexWrap: 'wrap'
-			}}
-		>
-			{children}
-		</div>
-	)
 }
 
 const MealSelectPage = () => {
