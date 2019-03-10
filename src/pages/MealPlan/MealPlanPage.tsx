@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router-dom'
 import { MealPlan } from '../../types'
 import { fetchPlan } from '../../meal_service'
 import Meal from '../MealSelect/Meal'
+import ShareMealPlan from './ShareMealPlan'
 
 enum PageStateType {
 	Initial = 'Initial',
@@ -105,6 +106,9 @@ const MealPlanRender = ({ pageState }: { pageState: State }) => {
 							<Meal mealId={id} />
 						</div>
 					))}
+					<div>
+						<ShareMealPlan mealPlan={plan} />
+					</div>
 				</div>
 			)
 		default:

@@ -125,3 +125,9 @@ export async function getPlans(): Promise<MealPlan[]> {
 
 	return savedPlans
 }
+
+export async function storeSharedPlan(mealPlan: MealPlan): Promise<void> {
+	const storageKey = `${MEAL_PLAN_KEY_PREFIX}_${mealPlan.id}`
+
+	setItem(storageKey, mealPlan)
+}

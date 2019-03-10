@@ -6,6 +6,7 @@ import HomePage from './pages/Home/HomePage'
 import MealPlanPage from './pages/MealPlan/MealPlanPage'
 import MealPositioningPage from './features/repositioning/MealPositioningPage'
 import MealPlansPage from './pages/MealPlans/MealPlansPage'
+import SharedMealPlan from './pages/MealPlan/SharedMealPlan'
 
 const App = () => {
 	return (
@@ -14,6 +15,7 @@ const App = () => {
 				<Route path="/" exact component={HomePage} />
 				<Route path="/build" exact component={MealSelectPage} />
 				<Route path="/plan" exact component={MealPlansPage} />
+				<Route path="/plan/share" exact component={SharedMealPlan} />
 				<Route path="/plan/:planId" exact component={MealPlanPage} />
 				<Route path="/repositioning" exact component={MealPositioningPage} />
 			</Switch>
