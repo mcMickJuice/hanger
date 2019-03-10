@@ -23,7 +23,6 @@ const App = () => {
 			</Switch>
 		</Router>
 	)
-	return <MealSelectPage maxNumberOfMeals={7} />
 }
 
 const rootElement = document.getElementById('root')

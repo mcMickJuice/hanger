@@ -1,6 +1,6 @@
 import React from 'react'
-import { Meal } from '../../types'
-import { getMealById } from '../../meal_service'
+import { Meal } from '../types'
+import { getMealById } from '../meal_service'
 
 function useMeal(
 	mealId: string

@@ -1,6 +1,6 @@
 import React from 'react'
 import { fetchMealSuggestions, savePlan } from '../../meal_service'
-import MealChip from './MealChip'
+import MealChip from '../../shared/MealChip'
 
 enum ActionType {
 	KeepMeal = 'KeepMeal',
@@ -36,9 +36,9 @@ interface State {
 	suggestedMealIds: string[]
 }
 
-interface Props {
-	maxNumberOfMeals: number
-}
+// interface Props {
+// 	maxNumberOfMeals: number
+// }
 
 const reducer = (state: State, action: Action): State => {
 	switch (action.type) {
@@ -102,7 +102,7 @@ const MealTileGrid = ({ children }: { children: React.ReactNode }) => {
 	)
 }
 
-const MealSelectPage = (props: Props) => {
+const MealSelectPage = () => {
 	const [state, dispatch] = React.useReducer(reducer, {
 		keptMealIds: [],
 		suggestedMealIds: []
