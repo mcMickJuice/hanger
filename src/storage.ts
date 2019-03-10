@@ -11,3 +11,20 @@ export function setItem<T>(key: string, item: T) {
 
 	localStorage.setItem(key, data)
 }
+
+export function getListFromPrefix<T>(prefix: string): T[] {
+	const numberInStorage = localStorage.length
+	const items = []
+	for (let i = 0; i < numberInStorage; i++) {
+		const keyInPosition = localStorage.key(i)
+		if (keyInPosition != null && keyInPosition.startsWith(prefix)) {
+			const data = localStorage.getItem(keyInPosition)
+
+			if (data != null) {
+				items.push(JSON.parse(data))
+			}
+		}
+	}
+
+	return items
+}
