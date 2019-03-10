@@ -1,5 +1,5 @@
 import React from 'react'
-import { fetchMealSuggestions } from '../../meal_service'
+import { fetchMealSuggestions, savePlan } from '../../meal_service'
 import MealChip from './MealChip'
 
 enum ActionType {
@@ -152,6 +152,15 @@ const MealSelectPage = (props: Props) => {
 		dispatch(action)
 	}
 
+	async function handleSavePlan() {
+		const mealPlanId = await savePlan({
+			mealIds: state.keptMealIds
+		})
+
+		//navigate to meal Plan page
+		console.log(mealPlanId)
+	}
+
 	return (
 		<div>
 			<div>
@@ -202,7 +211,12 @@ const MealSelectPage = (props: Props) => {
 							</MealTile>
 						))}
 					</MealTileGrid>
-					<button>Let's Plan our Eating!</button>
+					<button
+						disabled={state.keptMealIds.length === 0}
+						onClick={handleSavePlan}
+					>
+						Let's Plan our Eating!
+					</button>
 				</div>
 			) : (
 				<div>Select some meals above!</div>
