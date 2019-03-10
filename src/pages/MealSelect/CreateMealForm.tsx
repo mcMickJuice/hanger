@@ -1,5 +1,6 @@
 import React from 'react'
 import { savePlan } from '../../meal_service'
+import Button from '../../shared/Button'
 
 interface Props {
 	onMealCreated: (mealId: string) => void
@@ -37,9 +38,9 @@ const CreateMealPlanForm = ({ onMealCreated, mealIds }: Props) => {
 				name="meal-plan-name"
 			/>
 
-			<button disabled={mealPlanName.length < 5} onClick={handleCreateMealPlan}>
+			<Button disabled={mealPlanName.length < 5} onClick={handleCreateMealPlan}>
 				Create Meal
-			</button>
+			</Button>
 		</div>
 	)
 }

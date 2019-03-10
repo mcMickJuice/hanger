@@ -3,6 +3,7 @@ import PositionContext from './PositionContext'
 import MealPlanContext from './MealPlanContext'
 import { Meal } from '../../types'
 import { fetchMeals } from '../../meal_service'
+import Button from '../../shared/Button'
 
 const useFetchMealPlans = () => {
 	const { getPinnedItems } = React.useContext(PositionContext)
@@ -33,8 +34,8 @@ const MealPlanActions = () => {
 
 	return (
 		<div>
-			<button onClick={randomizeOrder}>Randomize</button>
-			<button onClick={generateNewMealPlan}>Generate new plan</button>
+			<Button onClick={randomizeOrder}>Randomize</Button>
+			<Button onClick={generateNewMealPlan}>Generate new plan</Button>
 		</div>
 	)
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import PositionContext from './PositionContext'
+import Button from '../../shared/Button'
 
 interface CardActionProps {
 	itemId: string
@@ -19,15 +20,15 @@ const CardActions = ({ itemId }: CardActionProps) => {
 		<div>
 			<div>
 				{position.currentIndex !== 0 ? (
-					<button onClick={() => swapItem(itemId, true)}>Up</button>
+					<Button onClick={() => swapItem(itemId, true)}>Up</Button>
 				) : null}
 				{itemIds.length - 1 !== position.currentIndex ? (
-					<button onClick={() => swapItem(itemId, false)}>Down</button>
+					<Button onClick={() => swapItem(itemId, false)}>Down</Button>
 				) : null}
 			</div>
-			<button onClick={() => pinItem(itemId)}>
+			<Button onClick={() => pinItem(itemId)}>
 				{position.isPinned ? 'Unlock' : 'Lock'}
-			</button>
+			</Button>
 		</div>
 	)
 }

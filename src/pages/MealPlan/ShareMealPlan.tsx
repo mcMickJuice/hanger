@@ -1,5 +1,6 @@
 import React from 'react'
 import { MealPlan } from '../../types'
+import Button from '../../shared/Button'
 
 interface Props {
 	mealPlan: MealPlan
@@ -32,7 +33,7 @@ const ShareMealPlan = ({ mealPlan }: Props) => {
 
 	return (
 		<div>
-			<button onClick={handleCopy}>Copy Share Url</button>
+			<Button onClick={handleCopy}>Copy Share Url</Button>
 			<textarea readOnly value={url} ref={inputRef} />
 		</div>
 	)

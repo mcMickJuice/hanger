@@ -5,6 +5,7 @@ import MealTileGrid from './MealTileGrid'
 import MealTile from './MealTile'
 import { RouteComponentProps } from 'react-router'
 import CreateMealPlanForm from './CreateMealForm'
+import Button from '../../shared/Button'
 
 enum ActionType {
 	KeepMeal = 'KeepMeal',
@@ -128,9 +129,9 @@ const MealSelectPage = (props: RouteComponentProps) => {
 	return (
 		<div>
 			<div>
-				<button onClick={handleLoadSuggestions}>
+				<Button onClick={handleLoadSuggestions}>
 					{isPendingSuggestions ? 'Loading...' : 'Get More Suggestions'}
-				</button>
+				</Button>
 			</div>
 			<div>
 				<h3>Do you wanna eat...</h3>
@@ -175,12 +176,12 @@ const MealSelectPage = (props: RouteComponentProps) => {
 							</MealTile>
 						))}
 					</MealTileGrid>
-					<button
+					<Button
 						disabled={state.keptMealIds.length === 0}
 						onClick={() => setIsPendingCreate(true)}
 					>
 						Let's Plan our Eating!
-					</button>
+					</Button>
 
 					{isPendingCreate ? (
 						<div>
@@ -188,7 +189,7 @@ const MealSelectPage = (props: RouteComponentProps) => {
 								onMealCreated={handleSavePlan}
 								mealIds={state.keptMealIds}
 							/>
-							<button onClick={() => setIsPendingCreate(false)}>Cancel</button>
+							<Button onClick={() => setIsPendingCreate(false)}>Cancel</Button>
 						</div>
 					) : null}
 				</div>
