@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-// import MealPlanPage from './MealPlanPage'
 import MealSelectPage from './pages/MealSelect/MealSelectPage'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import HomePage from './pages/Home/HomePage'

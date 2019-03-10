@@ -3,6 +3,7 @@ import { fetchMealSuggestions, savePlan } from '../../meal_service'
 import MealChip from '../../shared/MealChip'
 import MealTileGrid from './MealTileGrid'
 import MealTile from './MealTile'
+import { RouteComponentProps } from 'react-router'
 
 enum ActionType {
 	KeepMeal = 'KeepMeal',
@@ -67,7 +68,7 @@ const reducer = (state: State, action: Action): State => {
 	}
 }
 
-const MealSelectPage = () => {
+const MealSelectPage = (props: RouteComponentProps) => {
 	const [state, dispatch] = React.useReducer(reducer, {
 		keptMealIds: [],
 		suggestedMealIds: []
@@ -123,7 +124,7 @@ const MealSelectPage = () => {
 		})
 
 		//navigate to meal Plan page
-		console.log(mealPlanId)
+		props.history.push(`/plan/${mealPlanId}`)
 	}
 
 	return (
