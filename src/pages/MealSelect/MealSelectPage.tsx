@@ -1,6 +1,11 @@
 import React from 'react'
 import { fetchMealSuggestions } from '../../meal_service'
-import MealChip from './MealChip'
+import MealChip from '../../shared/MealChip'
+import MealTileGrid from './MealTileGrid'
+import MealTile from './MealTile'
+import { RouteComponentProps } from 'react-router'
+import CreateMealPlanForm from './CreateMealForm'
+import Button from '../../shared/Button'
 
 enum ActionType {
 	KeepMeal = 'KeepMeal',
@@ -36,9 +41,9 @@ interface State {
 	suggestedMealIds: string[]
 }
 
-interface Props {
-	maxNumberOfMeals: number
-}
+// interface Props {
+// 	maxNumberOfMeals: number
+// }
 
 const reducer = (state: State, action: Action): State => {
 	switch (action.type) {
@@ -65,49 +70,13 @@ const reducer = (state: State, action: Action): State => {
 	}
 }
 
-const MealTile = ({
-	style,
-	children,
-	onClick
-}: {
-	style: React.CSSProperties
-	children: React.ReactNode
-	onClick: () => void
-}) => {
-	return (
-		<div
-			style={{
-				width: '25%',
-				margin: '8px',
-				padding: '8px',
-				...style
-			}}
-			onClick={onClick}
-		>
-			{children}
-		</div>
-	)
-}
-
-const MealTileGrid = ({ children }: { children: React.ReactNode }) => {
-	return (
-		<div
-			style={{
-				display: 'flex',
-				flexWrap: 'wrap'
-			}}
-		>
-			{children}
-		</div>
-	)
-}
-
-const MealSelectPage = (props: Props) => {
+const MealSelectPage = (props: RouteComponentProps) => {
 	const [state, dispatch] = React.useReducer(reducer, {
 		keptMealIds: [],
 		suggestedMealIds: []
 	})
 	const [isPendingSuggestions, setIsPendingSuggestions] = React.useState(false)
+	const [isPendingCreate, setIsPendingCreate] = React.useState(false)
 
 	React.useEffect(() => {
 		handleLoadSuggestions()
@@ -152,12 +121,17 @@ const MealSelectPage = (props: Props) => {
 		dispatch(action)
 	}
 
+	function handleSavePlan(mealPlanId: string) {
+		//navigate to meal Plan page
+		props.history.push(`/plan/${mealPlanId}`)
+	}
+
 	return (
 		<div>
 			<div>
-				<button onClick={handleLoadSuggestions}>
+				<Button onClick={handleLoadSuggestions}>
 					{isPendingSuggestions ? 'Loading...' : 'Get More Suggestions'}
-				</button>
+				</Button>
 			</div>
 			<div>
 				<h3>Do you wanna eat...</h3>
@@ -202,7 +176,22 @@ const MealSelectPage = (props: Props) => {
 							</MealTile>
 						))}
 					</MealTileGrid>
-					<button>Let's Plan our Eating!</button>
+					<Button
+						disabled={state.keptMealIds.length === 0}
+						onClick={() => setIsPendingCreate(true)}
+					>
+						Let's Plan our Eating!
+					</Button>
+
+					{isPendingCreate ? (
+						<div>
+							<CreateMealPlanForm
+								onMealCreated={handleSavePlan}
+								mealIds={state.keptMealIds}
+							/>
+							<Button onClick={() => setIsPendingCreate(false)}>Cancel</Button>
+						</div>
+					) : null}
 				</div>
 			) : (
 				<div>Select some meals above!</div>

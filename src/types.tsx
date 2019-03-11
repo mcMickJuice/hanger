@@ -27,3 +27,9 @@ export interface Meal {
 	protein: Protein
 	health: Health
 }
+
+export interface MealPlan {
+	id: string
+	planName: string
+	mealIds: string[]
+}
