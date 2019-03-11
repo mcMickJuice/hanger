@@ -189,7 +189,12 @@ const MealSelectPage = (props: RouteComponentProps) => {
 								onMealCreated={handleSavePlan}
 								mealIds={state.keptMealIds}
 							/>
-							<Button onClick={() => setIsPendingCreate(false)}>Cancel</Button>
+							<Button
+								style={{ backgroundColor: 'gray' }}
+								onClick={() => setIsPendingCreate(false)}
+							>
+								Cancel
+							</Button>
 						</div>
 					) : null}
 				</div>

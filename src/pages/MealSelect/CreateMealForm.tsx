@@ -1,6 +1,7 @@
 import React from 'react'
 import { savePlan } from '../../meal_service'
 import Button from '../../shared/Button'
+import TextInput from '../../shared/TextInput'
 
 interface Props {
 	onMealCreated: (mealId: string) => void
@@ -8,14 +9,7 @@ interface Props {
 }
 
 const CreateMealPlanForm = ({ onMealCreated, mealIds }: Props) => {
-	const inputRef = React.useRef<HTMLInputElement>(null)
 	const [mealPlanName, updateMealPlanName] = React.useState('')
-
-	React.useEffect(() => {
-		if (inputRef.current != null) {
-			inputRef.current.focus()
-		}
-	}, [])
 
 	async function handleCreateMealPlan() {
 		const mealPlanId = await savePlan({
@@ -28,13 +22,11 @@ const CreateMealPlanForm = ({ onMealCreated, mealIds }: Props) => {
 
 	return (
 		<div>
-			<label htmlFor="meal-plan-name">Meal Plan Name</label>
-			<input
-				ref={inputRef}
+			<TextInput
+				onChange={updateMealPlanName}
 				value={mealPlanName}
-				onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
-					updateMealPlanName(evt.target.value)
-				}
+				label="Meal Plan Name"
+				autofocus
 				name="meal-plan-name"
 			/>
 
