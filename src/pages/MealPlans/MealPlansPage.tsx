@@ -1,6 +1,7 @@
 import React from 'react'
 import { MealPlan } from '../../types'
 import { getPlans } from '../../meal_service'
+import BigLink from '../../shared/BigLink'
 
 const MealPlansPage = () => {
 	const [plans, setPlans] = React.useState<MealPlan[]>([])
@@ -14,7 +15,11 @@ const MealPlansPage = () => {
 			<h2>Meal Plans</h2>
 			<div>
 				{plans.map(plan => {
-					return <div key={plan.id}>{plan.planName}</div>
+					return (
+						<BigLink to={`/plan/${plan.id}`} key={plan.id}>
+							{plan.planName}
+						</BigLink>
+					)
 				})}
 			</div>
 		</div>
