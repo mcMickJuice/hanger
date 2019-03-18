@@ -1,5 +1,6 @@
 import React from 'react'
 import BigLink from './BigLink'
+import ZIndex from '../z_index'
 
 interface NavProps {
 	children: React.ReactNode
@@ -22,12 +23,19 @@ const navMenuStyles = {
 	left: 0,
 	right: 0,
 	top: 0,
-	bottom: 0
+	bottom: 0,
+	zIndex: ZIndex.Top
+}
+
+const navMenuInnerStyles = {
+	width: '90%',
+	margin: 'auto'
 }
 
 const bodyStyles = {
 	position: 'relative' as 'relative',
-	height: '100%'
+	height: '100%',
+	padding: '8px'
 }
 
 interface NavLinkProps {
@@ -62,18 +70,20 @@ const Nav = ({ children }: NavProps) => {
 			<div style={bodyStyles}>
 				{isMenuVisible ? (
 					<div style={navMenuStyles}>
-						<NavLink onNavigate={() => setMenuVisible(false)}>
-							<BigLink to="/">Home</BigLink>
-						</NavLink>
-						<NavLink onNavigate={() => setMenuVisible(false)}>
-							<BigLink to="/build">Build a Plan</BigLink>
-						</NavLink>
-						<NavLink onNavigate={() => setMenuVisible(false)}>
-							<BigLink to="/plan">See All Plans</BigLink>
-						</NavLink>
-						<NavLink onNavigate={() => setMenuVisible(false)}>
-							<BigLink to="/repositioning">Reorder feature (WIP)</BigLink>
-						</NavLink>
+						<div style={navMenuInnerStyles}>
+							<NavLink onNavigate={() => setMenuVisible(false)}>
+								<BigLink to="/">Home</BigLink>
+							</NavLink>
+							<NavLink onNavigate={() => setMenuVisible(false)}>
+								<BigLink to="/build">Build a Plan</BigLink>
+							</NavLink>
+							<NavLink onNavigate={() => setMenuVisible(false)}>
+								<BigLink to="/plan">See All Plans</BigLink>
+							</NavLink>
+							<NavLink onNavigate={() => setMenuVisible(false)}>
+								<BigLink to="/repositioning">Reorder feature (WIP)</BigLink>
+							</NavLink>
+						</div>
 					</div>
 				) : null}
 				{children}
