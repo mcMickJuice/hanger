@@ -80,9 +80,6 @@ const Nav = ({ children }: NavProps) => {
 							<NavLink onNavigate={() => setMenuVisible(false)}>
 								<BigLink to="/plan">See All Plans</BigLink>
 							</NavLink>
-							<NavLink onNavigate={() => setMenuVisible(false)}>
-								<BigLink to="/repositioning">Reorder feature (WIP)</BigLink>
-							</NavLink>
 						</div>
 					</div>
 				) : null}
