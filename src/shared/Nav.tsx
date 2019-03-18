@@ -1,4 +1,11 @@
 import React from 'react'
+import AppBar from '@material-ui/core/AppBar'
+import { withStyles, WithStyles } from '@material-ui/core/styles'
+import Toolbar from '@material-ui/core/Toolbar'
+import MenuIcon from '@material-ui/icons/Menu'
+import HomeIcon from '@material-ui/icons/Home'
+import IconButton from '@material-ui/core/IconButton'
+import { Link } from 'react-router-dom'
 import BigLink from './BigLink'
 import ZIndex from '../z_index'
 
@@ -54,7 +61,24 @@ const NavLink = ({ children, onNavigate }: NavLinkProps) => {
 	)
 }
 
-const Nav = ({ children }: NavProps) => {
+const styles = {
+	appBar: {
+		top: 'auto',
+		bottom: 0
+		// height: '70px'
+	},
+	toolbar: {
+		alignItems: 'center',
+		justifyContent: 'space-between'
+	},
+	homeButton: {
+		color: 'white'
+	}
+}
+
+type NavStyles = WithStyles<typeof styles>
+
+const Nav = ({ children, classes }: NavProps & NavStyles) => {
 	const [isMenuVisible, setMenuVisible] = React.useState(false)
 
 	function toggleMenuVisible() {
@@ -63,10 +87,6 @@ const Nav = ({ children }: NavProps) => {
 
 	return (
 		<div style={rootStyles}>
-			<div style={navBarStyles}>
-				<div>Icon</div>
-				<div onClick={toggleMenuVisible}>Click to show menu</div>
-			</div>
 			<div style={bodyStyles}>
 				{isMenuVisible ? (
 					<div style={navMenuStyles}>
@@ -85,8 +105,30 @@ const Nav = ({ children }: NavProps) => {
 				) : null}
 				{children}
 			</div>
+			<AppBar
+				position="fixed"
+				classes={{
+					positionFixed: classes.appBar
+				}}
+			>
+				<Toolbar classes={{ root: classes.toolbar }}>
+					<Link to="/">
+						<IconButton
+							classes={{
+								root: classes.homeButton
+							}}
+						>
+							<HomeIcon />
+						</IconButton>
+					</Link>
+
+					<IconButton color="inherit" onClick={toggleMenuVisible}>
+						<MenuIcon />
+					</IconButton>
+				</Toolbar>
+			</AppBar>
 		</div>
 	)
 }
 
-export default Nav
+export default withStyles(styles)(Nav)
