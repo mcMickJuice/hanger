@@ -1,8 +1,12 @@
-const { get } = require('./http_client')
-const { mealsTableUrl } = require('./api_config')
+const Axios = require('axios')
+const { mealsTableUrl, airTableApiKey } = require('./api_config')
+
+const config = {
+	headers: { Authorization: `Bearer ${airTableApiKey}` }
+}
 
 export function handler(_, __, callback) {
-	get(mealsTableUrl).then(result => {
+	Axios.get(mealsTableUrl, config).then(result => {
 		const meals = result.data.records.map(r => {
 			const { id, ...rest } = r.fields
 			return {

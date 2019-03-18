@@ -1,5 +1,9 @@
-const { get } = require('./http_client')
-const { mealsTableUrl } = require('./api_config')
+const Axios = require('axios')
+const { mealsTableUrl, airTableApiKey } = require('./api_config')
+
+const config = {
+	headers: { Authorization: `Bearer ${airTableApiKey}` }
+}
 
 export function handler(event, __, callback) {
 	const mealId = event.queryStringParameters.mealId
@@ -13,7 +17,7 @@ export function handler(event, __, callback) {
 	}
 
 	const url = `${mealsTableUrl}/${mealId}`
-	get(url)
+	Axios.get(url, config)
 		.then(
 			result => {
 				const foundMeal = result.data

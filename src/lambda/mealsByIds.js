@@ -1,5 +1,9 @@
-const { get } = require('./http_client')
-const { mealsTableUrl } = require('./api_config')
+const Axios = require('axios')
+const { mealsTableUrl, airTableApiKey } = require('./api_config')
+
+const config = {
+	headers: { Authorization: `Bearer ${airTableApiKey}` }
+}
 
 export function handler(event, __, callback) {
 	const mealIds = event.queryStringParameters.mealIds
@@ -12,11 +16,9 @@ export function handler(event, __, callback) {
 		return
 	}
 
-	console.log(mealIds)
-
 	// we're going to cheat and fetch all meals then filter accordingly
 	// TODO: accommodate for pagination
-	get(mealsTableUrl)
+	Axios.get(mealsTableUrl, config)
 		.then(
 			result => {
 				const meals = result.data.records
