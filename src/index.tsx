@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import 'typeface-roboto'
 import './global.css'
 import MealSelectPage from './pages/MealSelect/MealSelectPage'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
