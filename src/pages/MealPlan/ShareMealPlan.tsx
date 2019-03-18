@@ -1,6 +1,7 @@
 import React from 'react'
 import { MealPlan } from '../../types'
 import Button from '@material-ui/core/Button'
+import { getShortUrl } from '../../url_service'
 
 interface Props {
 	mealPlan: MealPlan
@@ -23,10 +24,12 @@ function encodeMealPlanIntoUrl(mealPlan: MealPlan) {
 const ShareMealPlan = ({ mealPlan }: Props) => {
 	const [showCopyMessage, setShowCopyMessage] = React.useState(false)
 	const inputRef = React.useRef<HTMLTextAreaElement>(null)
-	const url = encodeMealPlanIntoUrl(mealPlan)
 
-	function handleCopy() {
+	async function handleCopy() {
 		if (inputRef.current != null) {
+			const encodedUrl = encodeMealPlanIntoUrl(mealPlan)
+			const shortUrl = await getShortUrl(encodedUrl)
+			inputRef.current.value = shortUrl
 			inputRef.current.setAttribute('style', 'display: block;')
 			inputRef.current.select()
 			document.execCommand('copy')
@@ -48,7 +51,7 @@ const ShareMealPlan = ({ mealPlan }: Props) => {
 			<textarea
 				style={{ display: 'none' }}
 				readOnly
-				value={url}
+				value={''}
 				ref={inputRef}
 			/>
 		</div>

@@ -12,8 +12,6 @@ const shortenUrl = 'https://api-ssl.bitly.com/v4/shorten'
 export function handler(req, _, callback) {
 	const body = JSON.parse(req.body)
 
-	console.log('first', body.url)
-
 	if (body == null || body.url == null || body.url === '') {
 		callback(null, {
 			statusCode: 400,
