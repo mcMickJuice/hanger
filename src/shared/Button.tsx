@@ -4,7 +4,8 @@ const defaultStyle = {
 	width: '100%',
 	padding: '16px',
 	backgroundColor: '#69b0dc',
-	fontSize: '16px'
+	fontSize: '16px',
+	cursor: 'pointer'
 }
 
 const Button = (props: ButtonHTMLAttributes<any>) => {
