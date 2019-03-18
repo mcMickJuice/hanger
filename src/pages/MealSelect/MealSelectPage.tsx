@@ -5,7 +5,7 @@ import MealTileGrid from './MealTileGrid'
 import MealTile from './MealTile'
 import { RouteComponentProps } from 'react-router'
 import CreateMealPlanForm from './CreateMealForm'
-import Button from '../../shared/Button'
+import Button from '@material-ui/core/Button'
 
 enum ActionType {
 	KeepMeal = 'KeepMeal',

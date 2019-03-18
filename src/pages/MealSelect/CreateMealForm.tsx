@@ -1,6 +1,6 @@
 import React from 'react'
 import { savePlan } from '../../meal_service'
-import Button from '../../shared/Button'
+import Button from '@material-ui/core/Button'
 import TextInput from '../../shared/TextInput'
 
 interface Props {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { MealPlan } from '../../types'
-import Button from '../../shared/Button'
+import Button from '@material-ui/core/Button'
 
 interface Props {
 	mealPlan: MealPlan

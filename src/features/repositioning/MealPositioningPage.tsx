@@ -3,7 +3,7 @@ import MealPlanContext, { MealProvider } from './MealPlanContext'
 import { PositionProvider } from './PositionContext'
 import Cards from './Cards'
 import MealPlanActions from './MealPlanActions'
-import Button from '../../shared/Button'
+import Button from '@material-ui/core/Button'
 
 interface MealPlanPageState {
 	errorMessage: string

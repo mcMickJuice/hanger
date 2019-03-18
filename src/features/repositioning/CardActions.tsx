@@ -1,6 +1,6 @@
 import React from 'react'
 import PositionContext from './PositionContext'
-import Button from '../../shared/Button'
+import Button from '@material-ui/core/Button'
 
 interface CardActionProps {
 	itemId: string

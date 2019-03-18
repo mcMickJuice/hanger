@@ -17,13 +17,6 @@ const rootStyles = {
 	height: '100%'
 }
 
-const navBarStyles = {
-	height: '80px',
-	backgroundColor: 'aqua',
-	display: 'flex',
-	justifyContent: 'space-between'
-}
-
 const navMenuStyles = {
 	position: 'absolute' as 'absolute',
 	backgroundColor: 'white',
@@ -65,7 +58,6 @@ const styles = {
 	appBar: {
 		top: 'auto',
 		bottom: 0
-		// height: '70px'
 	},
 	toolbar: {
 		alignItems: 'center',

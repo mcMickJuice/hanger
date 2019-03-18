@@ -3,7 +3,7 @@ import PositionContext from './PositionContext'
 import MealPlanContext from './MealPlanContext'
 import { Meal } from '../../types'
 import { fetchMeals } from '../../meal_service'
-import Button from '../../shared/Button'
+import Button from '@material-ui/core/Button'
 
 const useFetchMealPlans = () => {
 	const { getPinnedItems } = React.useContext(PositionContext)
