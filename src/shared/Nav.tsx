@@ -3,57 +3,17 @@ import AppBar from '@material-ui/core/AppBar'
 import { withStyles, WithStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
 import MenuIcon from '@material-ui/icons/Menu'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 import HomeIcon from '@material-ui/icons/Home'
 import IconButton from '@material-ui/core/IconButton'
 import { Link } from 'react-router-dom'
-import BigLink from './BigLink'
-import ZIndex from '../z_index'
 
 interface NavProps {
 	children: React.ReactNode
 }
 
-const rootStyles = {
-	height: '100%'
-}
-
-const navMenuStyles = {
-	position: 'absolute' as 'absolute',
-	backgroundColor: 'white',
-	left: 0,
-	right: 0,
-	top: 0,
-	bottom: 0,
-	zIndex: ZIndex.Top
-}
-
-const navMenuInnerStyles = {
-	width: '90%',
-	margin: 'auto'
-}
-
-const bodyStyles = {
-	position: 'relative' as 'relative',
-	height: '100%',
-	padding: '8px'
-}
-
-interface NavLinkProps {
-	children: React.ReactNode
-	onNavigate: () => void
-}
-
-const navLinkStyles = {
-	marginTop: '16px'
-}
-const NavLink = ({ children, onNavigate }: NavLinkProps) => {
-	return (
-		<div onClick={onNavigate} style={navLinkStyles}>
-			{children}
-		</div>
-	)
-}
-
+const toolbarHeight = 60
 const styles = {
 	appBar: {
 		top: 'auto',
@@ -61,48 +21,68 @@ const styles = {
 	},
 	toolbar: {
 		alignItems: 'center',
-		justifyContent: 'space-between'
+		justifyContent: 'space-between',
+		height: `${toolbarHeight}px`
 	},
 	homeButton: {
 		color: 'white'
+	},
+	body: {
+		padding: `8px 8px ${toolbarHeight}px 8px`
 	}
 }
 
 type NavStyles = WithStyles<typeof styles>
 
-const Nav = ({ children, classes }: NavProps & NavStyles) => {
-	const [isMenuVisible, setMenuVisible] = React.useState(false)
+interface MenuItemLinkProps {
+	to: string
+	children: string
+}
 
-	function toggleMenuVisible() {
-		setMenuVisible(isOpen => !isOpen)
+const MenuItemLink = ({ to, children }: MenuItemLinkProps) => {
+	return (
+		<Link to={to} style={{ textDecoration: 'none', display: 'block' }}>
+			<MenuItem>{children}</MenuItem>
+		</Link>
+	)
+}
+
+const Nav = ({ children, classes }: NavProps & NavStyles) => {
+	const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
+
+	function handleMenuClose() {
+		setAnchorEl(null)
+	}
+
+	function delayHandleMenuClose() {
+		setTimeout(handleMenuClose, 300)
+	}
+
+	function handleMenuClick(evt: React.MouseEvent<HTMLElement>) {
+		const { currentTarget } = evt
+
+		setAnchorEl(currentTarget)
 	}
 
 	return (
-		<div style={rootStyles}>
-			<div style={bodyStyles}>
-				{isMenuVisible ? (
-					<div style={navMenuStyles}>
-						<div style={navMenuInnerStyles}>
-							<NavLink onNavigate={() => setMenuVisible(false)}>
-								<BigLink to="/">Home</BigLink>
-							</NavLink>
-							<NavLink onNavigate={() => setMenuVisible(false)}>
-								<BigLink to="/build">Build a Plan</BigLink>
-							</NavLink>
-							<NavLink onNavigate={() => setMenuVisible(false)}>
-								<BigLink to="/plan">See All Plans</BigLink>
-							</NavLink>
-						</div>
-					</div>
-				) : null}
-				{children}
-			</div>
+		<div>
+			<div className={classes.body}>{children}</div>
 			<AppBar
 				position="fixed"
 				classes={{
 					positionFixed: classes.appBar
 				}}
 			>
+				<Menu
+					anchorEl={anchorEl}
+					open={anchorEl != null}
+					onClose={handleMenuClose}
+					onClick={delayHandleMenuClose}
+				>
+					<MenuItemLink to="/">Home</MenuItemLink>
+					<MenuItemLink to="/build">Build a Plan</MenuItemLink>
+					<MenuItemLink to="/plan">See All Plans</MenuItemLink>
+				</Menu>
 				<Toolbar classes={{ root: classes.toolbar }}>
 					<Link to="/">
 						<IconButton
@@ -114,7 +94,7 @@ const Nav = ({ children, classes }: NavProps & NavStyles) => {
 						</IconButton>
 					</Link>
 
-					<IconButton color="inherit" onClick={toggleMenuVisible}>
+					<IconButton color="inherit" onClick={handleMenuClick}>
 						<MenuIcon />
 					</IconButton>
 				</Toolbar>

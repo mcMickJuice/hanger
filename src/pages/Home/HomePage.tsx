@@ -1,15 +1,15 @@
 import React from 'react'
+import Typography from '@material-ui/core/Typography'
 
 const HomePage = () => {
 	return (
 		<div>
-			<h1>Meal Plan Site</h1>
+			<Typography variant="h2">Hangry?</Typography>
 
-			<p>
+			<Typography variant="body1">
 				Welcome to meal plan site! This site is ugly and isn't fully
 				functional...but it will be some day!
-			</p>
-			<p>Hit the menu button in top right to navigate!</p>
+			</Typography>
 		</div>
 	)
 }
