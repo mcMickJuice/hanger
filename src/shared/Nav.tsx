@@ -54,10 +54,6 @@ const Nav = ({ children, classes }: NavProps & NavStyles) => {
 		setAnchorEl(null)
 	}
 
-	function delayHandleMenuClose() {
-		setTimeout(handleMenuClose, 300)
-	}
-
 	function handleMenuClick(evt: React.MouseEvent<HTMLElement>) {
 		const { currentTarget } = evt
 
@@ -77,7 +73,7 @@ const Nav = ({ children, classes }: NavProps & NavStyles) => {
 					anchorEl={anchorEl}
 					open={anchorEl != null}
 					onClose={handleMenuClose}
-					onClick={delayHandleMenuClose}
+					onClick={handleMenuClose}
 				>
 					<MenuItemLink to="/">Home</MenuItemLink>
 					<MenuItemLink to="/build">Build a Plan</MenuItemLink>
