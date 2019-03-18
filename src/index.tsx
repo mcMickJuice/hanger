@@ -8,18 +8,21 @@ import MealPlanPage from './pages/MealPlan/MealPlanPage'
 import MealPositioningPage from './features/repositioning/MealPositioningPage'
 import MealPlansPage from './pages/MealPlans/MealPlansPage'
 import SharedMealPlan from './pages/MealPlan/SharedMealPlan'
+import Nav from './shared/Nav'
 
 const App = () => {
 	return (
 		<Router>
-			<Switch>
-				<Route path="/" exact component={HomePage} />
-				<Route path="/build" exact component={MealSelectPage} />
-				<Route path="/plan" exact component={MealPlansPage} />
-				<Route path="/plan/share" exact component={SharedMealPlan} />
-				<Route path="/plan/:planId" exact component={MealPlanPage} />
-				<Route path="/repositioning" exact component={MealPositioningPage} />
-			</Switch>
+			<Nav>
+				<Switch>
+					<Route path="/" exact component={HomePage} />
+					<Route path="/build" exact component={MealSelectPage} />
+					<Route path="/plan" exact component={MealPlansPage} />
+					<Route path="/plan/share" exact component={SharedMealPlan} />
+					<Route path="/plan/:planId" exact component={MealPlanPage} />
+					<Route path="/repositioning" exact component={MealPositioningPage} />
+				</Switch>
+			</Nav>
 		</Router>
 	)
 }

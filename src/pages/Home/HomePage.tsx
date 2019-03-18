@@ -1,17 +1,15 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import BigLink from '../../shared/BigLink'
 
 const HomePage = () => {
 	return (
 		<div>
 			<h1>Meal Plan Site</h1>
 
-			<BigLink to="/build">Build a Plan</BigLink>
-
-			<BigLink to="/plan">See All Plans</BigLink>
-
-			<BigLink to="/repositioning">Reorder feature (WIP)</BigLink>
+			<p>
+				Welcome to meal plan site! This site is ugly and isn't fully
+				functional...but it will be some day!
+			</p>
+			<p>Hit the menu button in top right to navigate!</p>
 		</div>
 	)
 }

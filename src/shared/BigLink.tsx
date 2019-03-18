@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import Button from './Button'
 
 interface Props {
 	to: string
@@ -15,7 +16,7 @@ const styles = {
 const BigLink = ({ to, children }: Props) => {
 	return (
 		<Link to={to}>
-			<div style={styles}>{children}</div>
+			<Button style={styles}>{children}</Button>
 		</Link>
 	)
 }
