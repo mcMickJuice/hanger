@@ -1,7 +1,7 @@
 import Axios from 'axios'
 import { Meal, MealPlan } from './types'
 import { generateUuid } from './uuid_service'
-import { setItem, getItem, getListFromPrefix } from './storage'
+import { setItem, getItem, getListFromPrefix, removeItem } from './storage'
 
 function partition<T>(
 	collection: T[],
@@ -111,6 +111,12 @@ export async function savePlan(newMeal: Omit<MealPlan, 'id'>): Promise<string> {
 	setItem(storageKey, meal)
 
 	return newId
+}
+
+export async function deletePlan(planId: string): Promise<void> {
+	const storageKey = `${MEAL_PLAN_KEY_PREFIX}_${planId}`
+
+	removeItem(storageKey)
 }
 
 export async function fetchPlan(planId: string): Promise<MealPlan | null> {

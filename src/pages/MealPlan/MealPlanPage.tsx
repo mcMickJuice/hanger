@@ -1,9 +1,10 @@
 import React from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import { MealPlan } from '../../types'
-import { fetchPlan } from '../../meal_service'
+import { fetchPlan, deletePlan } from '../../meal_service'
 import Meal from '../MealSelect/Meal'
 import ShareMealPlan from './ShareMealPlan'
+import Button from '@material-ui/core/Button'
 
 enum PageStateType {
 	Initial = 'Initial',
@@ -83,8 +84,6 @@ function reducer(state: State, action: Action): State {
 	}
 }
 
-function handleDeletePlan(planId: string) {}
-
 const MealPlanRender = ({ pageState }: { pageState: State }) => {
 	switch (pageState.type) {
 		case PageStateType.Initial:
@@ -116,11 +115,19 @@ const MealPlanRender = ({ pageState }: { pageState: State }) => {
 	}
 }
 
-const MealPlanPage = ({ match }: RouteComponentProps<{ planId: string }>) => {
+const MealPlanPage = ({
+	match,
+	history
+}: RouteComponentProps<{ planId: string }>) => {
 	const { planId } = match.params
 	const [state, dispatch] = React.useReducer(reducer, {
 		type: PageStateType.Initial
 	})
+
+	async function handleDeletePlan() {
+		await deletePlan(planId)
+		history.replace('/')
+	}
 
 	React.useEffect(() => {
 		dispatch({
@@ -148,6 +155,15 @@ const MealPlanPage = ({ match }: RouteComponentProps<{ planId: string }>) => {
 		<div>
 			<h1>Meal Plan</h1>
 			<MealPlanRender pageState={state} />
+
+			<Button
+				onClick={handleDeletePlan}
+				style={{ marginTop: '16px' }}
+				fullWidth
+				variant="outlined"
+			>
+				Delete Plan
+			</Button>
 		</div>
 	)
 }

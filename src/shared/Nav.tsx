@@ -27,7 +27,7 @@ const styles = {
 		color: 'white'
 	},
 	body: {
-		padding: `8px 8px ${toolbarHeight}px 8px`
+		padding: `8px 8px ${toolbarHeight + 10}px 8px`
 	}
 }
 

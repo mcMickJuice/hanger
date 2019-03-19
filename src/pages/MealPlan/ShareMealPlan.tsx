@@ -45,7 +45,7 @@ const ShareMealPlan = ({ mealPlan }: Props) => {
 
 	return (
 		<div>
-			<Button onClick={handleCopy}>
+			<Button onClick={handleCopy} fullWidth variant="contained">
 				{showCopyMessage ? 'URL Copied!' : 'Copy Share Url'}
 			</Button>
 			<textarea

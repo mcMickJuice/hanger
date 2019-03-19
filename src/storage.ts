@@ -12,6 +12,10 @@ export function setItem<T>(key: string, item: T) {
 	localStorage.setItem(key, data)
 }
 
+export function removeItem(key: string) {
+	localStorage.removeItem(key)
+}
+
 export function getListFromPrefix<T>(prefix: string): T[] {
 	const numberInStorage = localStorage.length
 	const items = []
