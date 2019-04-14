@@ -1,35 +1,22 @@
 import React from 'react'
-import { MealPlan } from '../../types'
 import Button from '@material-ui/core/Button'
-import { getShortUrl } from '../../url_service'
-
 interface Props {
-	mealPlan: MealPlan
+	mealPlanId: string
 }
 
-function encodeMealPlanIntoUrl(mealPlan: MealPlan) {
-	const baseUrl = `${window.location.origin}/plan/share`
-	const mealIdsParam = mealPlan.mealIds
-		.map(mealId => `mealIds=${mealId}`)
-		.join('&')
-	const mealPlanIdParam = `mealPlanId=${mealPlan.id}`
-	const mealPlanNameParam = `mealPlanName=${mealPlan.planName}`
-
-	return `${baseUrl}?${mealIdsParam}&${mealPlanIdParam}&${mealPlanNameParam}`
+function encodeMealPlanIntoUrl(mealPlanId: string) {
+	return `${window.location.origin}/plan/${mealPlanId}`
 }
 
-// get meal plan from storage
-// encode that into url
-
-const ShareMealPlan = ({ mealPlan }: Props) => {
+const ShareMealPlan = ({ mealPlanId }: Props) => {
 	const [showCopyMessage, setShowCopyMessage] = React.useState(false)
 	const inputRef = React.useRef<HTMLTextAreaElement>(null)
 
 	async function handleCopy() {
 		if (inputRef.current != null) {
-			const encodedUrl = encodeMealPlanIntoUrl(mealPlan)
-			const shortUrl = await getShortUrl(encodedUrl)
-			inputRef.current.value = shortUrl
+			const encodedUrl = encodeMealPlanIntoUrl(mealPlanId)
+
+			inputRef.current.value = encodedUrl
 			inputRef.current.setAttribute('style', 'display: block;')
 			inputRef.current.select()
 			document.execCommand('copy')

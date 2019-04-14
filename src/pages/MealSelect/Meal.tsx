@@ -1,8 +1,9 @@
 import React from 'react'
-import MealChip from '../../shared/MealChip'
+
+import { Meal as MealType } from '../../types'
 
 interface Props {
-	mealId: string
+	meal: MealType
 }
 
 const style = {
@@ -10,10 +11,10 @@ const style = {
 	backgroundColor: 'tomato'
 }
 
-const Meal = ({ mealId }: Props) => {
+const Meal = ({ meal }: Props) => {
 	return (
 		<div style={style}>
-			<MealChip mealId={mealId} />
+			<div>{meal.mealName}</div>
 		</div>
 	)
 }

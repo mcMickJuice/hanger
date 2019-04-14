@@ -1,160 +1,80 @@
 import React from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import { MealPlan } from '../../types'
-import { fetchPlan, deletePlan } from '../../meal_service'
+import { MealPlan, Meal as MealType } from '../../types'
+import { deletePlan } from '../../meal_service'
 import Meal from '../MealSelect/Meal'
 import ShareMealPlan from './ShareMealPlan'
 import Button from '@material-ui/core/Button'
+import { Query } from 'react-apollo'
+import { gql } from 'apollo-boost'
 
-enum PageStateType {
-	Initial = 'Initial',
-	Loading = 'Loading',
-	Error = 'Error',
-	NoPlanFound = 'NoPlanFound',
-	PlanFound = 'PlanFound'
+// ugh do we not have types on client?
+type MealPlanHydrated = Pick<MealPlan, 'id' | 'planName'> & {
+	meals: MealType[]
 }
 
-type State =
-	| {
-			type: PageStateType.Initial
-	  }
-	| {
-			type: PageStateType.Loading
-	  }
-	| {
-			type: PageStateType.NoPlanFound
-	  }
-	| {
-			type: PageStateType.PlanFound
-			plan: MealPlan
-	  }
-	| {
-			type: PageStateType.Error
-			errorMessage: string
-	  }
-
-enum PageActionType {
-	Loading = 'Loading',
-	Error = 'Error',
-	NoPlanFound = 'NoPlanFound',
-	PlanFound = 'PlanFound'
-}
-
-type Action =
-	| {
-			type: PageActionType.Error
-			errorMessage: string
-	  }
-	| {
-			type: PageActionType.Loading
-	  }
-	| {
-			type: PageActionType.NoPlanFound
-	  }
-	| {
-			type: PageActionType.PlanFound
-			mealPlan: MealPlan
-	  }
-
-function reducer(state: State, action: Action): State {
-	switch (action.type) {
-		case PageActionType.Error:
-			return {
-				type: PageStateType.Error,
-				errorMessage: action.errorMessage
+const query = gql`
+	query MealPlanQuery($mealPlanId: String!) {
+		mealPlan(mealPlanId: $mealPlanId) {
+			id
+			planName
+			numberOfMeals
+			meals {
+				mealName
+				id
 			}
-
-		case PageActionType.Loading:
-			return {
-				type: PageStateType.Loading
-			}
-
-		case PageActionType.NoPlanFound:
-			return {
-				type: PageStateType.NoPlanFound
-			}
-
-		case PageActionType.PlanFound:
-			return {
-				type: PageStateType.PlanFound,
-				plan: action.mealPlan
-			}
-		default:
-			return state
+		}
 	}
-}
-
-const MealPlanRender = ({ pageState }: { pageState: State }) => {
-	switch (pageState.type) {
-		case PageStateType.Initial:
-			return null
-		case PageStateType.Error:
-			return <div>An Error Occurred</div>
-		case PageStateType.Loading:
-			return <div>Loading Plan</div>
-		case PageStateType.NoPlanFound:
-			return <div>No Plan found</div>
-		case PageStateType.PlanFound:
-			const { plan } = pageState
-
-			return (
-				<div>
-					<h2>Meal - {plan.planName}</h2>
-					{plan.mealIds.map(id => (
-						<div style={{ marginBottom: '8px' }} key={id}>
-							<Meal mealId={id} />
-						</div>
-					))}
-					<div>
-						<ShareMealPlan mealPlan={plan} />
-					</div>
-				</div>
-			)
-		default:
-			throw new Error(`Bad Page State`)
-	}
-}
+`
 
 const MealPlanPage = ({
 	match,
 	history
 }: RouteComponentProps<{ planId: string }>) => {
 	const { planId } = match.params
-	const [state, dispatch] = React.useReducer(reducer, {
-		type: PageStateType.Initial
-	})
+	// const [state, dispatch] = React.useReducer(reducer, {
+	// 	type: PageStateType.Initial
+	// })
 
 	async function handleDeletePlan() {
 		await deletePlan(planId)
 		history.replace('/')
 	}
 
-	React.useEffect(() => {
-		dispatch({
-			type: PageActionType.Loading
-		})
-		fetchPlan(planId)
-			.then(mealPlan => {
-				if (mealPlan == null) {
-					dispatch({
-						type: PageActionType.NoPlanFound
-					})
-				} else {
-					dispatch({ type: PageActionType.PlanFound, mealPlan })
-				}
-			})
-			.catch(err => {
-				dispatch({
-					type: PageActionType.Error,
-					errorMessage: err.message
-				})
-			})
-	}, [planId])
-
 	return (
 		<div>
 			<h1>Meal Plan</h1>
-			<MealPlanRender pageState={state} />
+
+			<Query<{ mealPlan: MealPlanHydrated }, { mealPlanId: string }>
+				query={query}
+				variables={{
+					mealPlanId: planId
+				}}
+			>
+				{({ loading, error, data }) => {
+					if (loading) {
+						return <div>Plan in Loading</div>
+					} else if (error) {
+						return <div>There was an error getting plan</div>
+					} else if (data == null) {
+						return <div>No Plan found</div>
+					} else {
+						return (
+							<div>
+								<h2>Meal - {data.mealPlan.planName}</h2>
+								{data.mealPlan.meals.map(meal => (
+									<div style={{ marginBottom: '8px' }} key={meal.id}>
+										<Meal meal={meal} />
+									</div>
+								))}
+								<div>
+									<ShareMealPlan mealPlanId={data.mealPlan.id} />
+								</div>
+							</div>
+						)
+					}
+				}}
+			</Query>
 
 			<Button
 				onClick={handleDeletePlan}
