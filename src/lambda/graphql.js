@@ -28,7 +28,7 @@ const typeDefs = gql`
 
 	type MealPlan {
 		id: ID!
-		mealPlanName: String!
+		planName: String!
 		numberOfMeals: Int!
 		meals: [Meal!]!
 	}

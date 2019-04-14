@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import 'typeface-roboto'
+import { ApolloProvider } from 'react-apollo'
+import apolloClient from './graphql_client'
 import './global.css'
 import MealSelectPage from './pages/MealSelect/MealSelectPage'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
@@ -15,14 +17,20 @@ const App = () => {
 	return (
 		<Router>
 			<Nav>
-				<Switch>
-					<Route path="/" exact component={HomePage} />
-					<Route path="/build" exact component={MealSelectPage} />
-					<Route path="/plan" exact component={MealPlansPage} />
-					<Route path="/plan/share" exact component={SharedMealPlan} />
-					<Route path="/plan/:planId" exact component={MealPlanPage} />
-					<Route path="/repositioning" exact component={MealPositioningPage} />
-				</Switch>
+				<ApolloProvider client={apolloClient}>
+					<Switch>
+						<Route path="/" exact component={HomePage} />
+						<Route path="/build" exact component={MealSelectPage} />
+						<Route path="/plan" exact component={MealPlansPage} />
+						<Route path="/plan/share" exact component={SharedMealPlan} />
+						<Route path="/plan/:planId" exact component={MealPlanPage} />
+						<Route
+							path="/repositioning"
+							exact
+							component={MealPositioningPage}
+						/>
+					</Switch>
+				</ApolloProvider>
 			</Nav>
 		</Router>
 	)

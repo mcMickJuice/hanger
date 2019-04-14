@@ -24,8 +24,13 @@ const meals = [
 const mealPlans = [
 	{
 		id: 'meal-1',
-		mealPlanName: 'My Meal Plan',
+		planName: 'My Meal Plan',
 		mealIds: meals.map(m => m.id)
+	},
+	{
+		id: 'meal-2',
+		planName: 'A hearty meal pla ',
+		mealIds: ['id3']
 	}
 ]
 
