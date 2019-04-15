@@ -10,7 +10,7 @@ const typeDefs = gql`
 
 	input MealFilter {
 		filterType: FilterType
-		ids: [String!]
+		ids: [ID!]
 	}
 
 	enum FilterType {

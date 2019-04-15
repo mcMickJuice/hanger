@@ -1,11 +1,12 @@
 import React from 'react'
-import { fetchMealSuggestions } from '../../meal_service'
-import MealChip from '../../shared/MealChip'
 import MealTileGrid from './MealTileGrid'
 import MealTile from './MealTile'
 import { RouteComponentProps } from 'react-router'
 import CreateMealPlanForm from './CreateMealForm'
 import Button from '@material-ui/core/Button'
+import MealSuggestions from './MealSuggestions'
+import { Query } from 'react-apollo'
+import { gql } from 'apollo-boost'
 
 enum ActionType {
 	KeepMeal = 'KeepMeal',
@@ -13,7 +14,7 @@ enum ActionType {
 	LoadNewSuggestions = 'LoadNewSuggestions'
 }
 
-type Action = KeepMealAction | UnkeepMealAction | LoadNewSuggestionsAction
+type Action = KeepMealAction | UnkeepMealAction
 
 interface KeepMealAction {
 	type: ActionType.KeepMeal
@@ -29,21 +30,10 @@ interface UnkeepMealAction {
 	}
 }
 
-interface LoadNewSuggestionsAction {
-	type: ActionType.LoadNewSuggestions
-	payload: {
-		mealIds: string[]
-	}
-}
-
 interface State {
 	keptMealIds: string[]
 	suggestedMealIds: string[]
 }
-
-// interface Props {
-// 	maxNumberOfMeals: number
-// }
 
 const reducer = (state: State, action: Action): State => {
 	switch (action.type) {
@@ -60,27 +50,27 @@ const reducer = (state: State, action: Action): State => {
 					mealId => action.payload.mealId !== mealId
 				)
 			}
-		case ActionType.LoadNewSuggestions:
-			return {
-				...state,
-				suggestedMealIds: action.payload.mealIds
-			}
 		default:
 			return state
 	}
 }
+
+const query = gql`
+	query SelectedMealsQuery($selectedIds: [ID!]!) {
+		meals(filter: { filterType: INCLUDE, ids: $selectedIds }) {
+			id
+			mealName
+		}
+	}
+`
 
 const MealSelectPage = (props: RouteComponentProps) => {
 	const [state, dispatch] = React.useReducer(reducer, {
 		keptMealIds: [],
 		suggestedMealIds: []
 	})
-	const [isPendingSuggestions, setIsPendingSuggestions] = React.useState(false)
-	const [isPendingCreate, setIsPendingCreate] = React.useState(false)
 
-	React.useEffect(() => {
-		handleLoadSuggestions()
-	}, [])
+	const [isPendingCreate, setIsPendingCreate] = React.useState(false)
 
 	function handleKeepMeal(mealId: string) {
 		const action: KeepMealAction = {
@@ -104,23 +94,6 @@ const MealSelectPage = (props: RouteComponentProps) => {
 		dispatch(action)
 	}
 
-	async function handleLoadSuggestions() {
-		setIsPendingSuggestions(true)
-
-		//make call, excluding kept meals
-
-		const mealIds = await fetchMealSuggestions(12, state.keptMealIds)
-
-		const action: LoadNewSuggestionsAction = {
-			type: ActionType.LoadNewSuggestions,
-			payload: {
-				mealIds
-			}
-		}
-		setIsPendingSuggestions(false)
-		dispatch(action)
-	}
-
 	function handleSavePlan(mealPlanId: string) {
 		//navigate to meal Plan page
 		props.history.push(`/plan/${mealPlanId}`)
@@ -128,54 +101,53 @@ const MealSelectPage = (props: RouteComponentProps) => {
 
 	return (
 		<div>
-			<div>
-				<Button onClick={handleLoadSuggestions}>
-					{isPendingSuggestions ? 'Loading...' : 'Get More Suggestions'}
-				</Button>
-			</div>
-			<div>
-				<h3>Do you wanna eat...</h3>
-				<MealTileGrid>
-					{state.suggestedMealIds.map(id => {
-						const isSelected = state.keptMealIds.includes(id)
-						return (
-							<MealTile
-								style={{
-									backgroundColor: 'tomato',
+			<MealSuggestions
+				keptMealIds={state.keptMealIds}
+				onKeepMeal={handleKeepMeal}
+			/>
 
-									opacity: isSelected ? 0.4 : 1,
-									cursor: isSelected ? 'not-allowed' : 'pointer'
-								}}
-								key={id}
-								onClick={() => {
-									if (isSelected) return
-									handleKeepMeal(id)
-								}}
-							>
-								<MealChip mealId={id} />
-							</MealTile>
-						)
-					})}
-				</MealTileGrid>
-			</div>
 			{state.keptMealIds.length > 0 ? (
 				<div>
 					<h3>Can't wait to eat...</h3>
-					<MealTileGrid>
-						{state.keptMealIds.map(id => (
-							<MealTile
-								style={{
-									backgroundColor: '#60c564'
-								}}
-								key={id}
-								onClick={() => {
-									handleUnkeepMeal(id)
-								}}
-							>
-								<MealChip mealId={id} />
-							</MealTile>
-						))}
-					</MealTileGrid>
+					<Query<
+						{ meals: { id: string; mealName: string }[] },
+						{
+							selectedIds: string[]
+						}
+					>
+						query={query}
+						variables={{ selectedIds: state.keptMealIds }}
+					>
+						{({ loading, error, data }) => {
+							if (loading) {
+								return <div>Loading...</div>
+							}
+							if (error) {
+								return <div>There was an error</div>
+							}
+							if (data == null) {
+								return <div>No Data to Show</div>
+							}
+							return (
+								<MealTileGrid>
+									{data.meals.map(meal => (
+										<MealTile
+											style={{
+												backgroundColor: '#60c564'
+											}}
+											key={meal.id}
+											onClick={() => {
+												handleUnkeepMeal(meal.id)
+											}}
+										>
+											<div>{meal.mealName}</div>
+										</MealTile>
+									))}
+								</MealTileGrid>
+							)
+						}}
+					</Query>
+
 					<Button
 						disabled={state.keptMealIds.length === 0}
 						onClick={() => setIsPendingCreate(true)}
