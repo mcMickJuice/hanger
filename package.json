@@ -35,12 +35,17 @@
     "@types/react-router-dom": "^4.3.1",
     "@types/storybook__react": "^4.0.1",
     "@types/uuid": "^3.4.4",
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
+    "@typescript-eslint/parser": "^1.6.0",
     "babel-loader": "8.0.5",
     "dotenv-webpack": "^1.7.0",
     "http-proxy-middleware": "^0.19.0",
     "netlify-lambda": "^1.4.2",
     "nodemon": "^1.18.10",
-    "npm-run-all": "^4.1.5"
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.17.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1"
   },
   "scripts": {
     "start": "run-p start:**",
@@ -53,10 +58,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "build-storybook": "build-storybook -s public",
+    "typecheck": "tsc --noEmit -p .",
+    "lint": "eslint ./src"
   },
   "browserslist": [
     ">0.2%",
