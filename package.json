@@ -60,7 +60,7 @@
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
     "typecheck": "tsc --noEmit -p .",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src/**/*.{js,ts,tsx}"
   },
   "browserslist": [
     ">0.2%",
