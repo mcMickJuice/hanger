@@ -55,12 +55,7 @@ class MealService extends RESTDataSource {
   willSendRequest(request) {
     request.headers.set('Authorization', `Bearer ${airTableApiKey}`)
   }
-  async getMealsWithFilter(ids, include) {
-    // const [included, excluded] = partition(meals, item => {
-    //   return ids.includes(item.id)
-    // })
-
-    // return include ? included : excluded
+  async getMealsWithFilter(ids, include, limit) {
     const response = await this.get(mealsTableUrl)
 
     const meals = response.records.map(r => {
@@ -72,7 +67,13 @@ class MealService extends RESTDataSource {
       }
     })
 
-    return meals
+    const [included, excluded] = partition(meals, item => {
+      return ids.includes(item.id)
+    })
+
+    const toReturn = include === 'INCLUDE' ? included : excluded
+
+    return limit == null ? toReturn : toReturn.slice(0, limit)
   }
 
   getMealPlans() {

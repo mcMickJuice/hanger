@@ -3,7 +3,7 @@ const MealService = require('./meal_service')
 
 const typeDefs = gql`
   type Query {
-    meals(filter: MealFilter): [Meal!]!
+    meals(filter: MealFilter!, limit: Int): [Meal!]!
     mealPlans: [MealPlan!]!
     mealPlan(mealPlanId: String!): MealPlan
     meal(mealId: ID!): Meal
@@ -62,9 +62,9 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    meals: (_, __, context) => {
-      // const { ids, filterType } = filter || {}
-      return context.dataSources.mealApi.getMealsWithFilter()
+    meals: (_, { filter, limit }, context) => {
+      const { ids, filterType } = filter
+      return context.dataSources.mealApi.getMealsWithFilter(ids, filterType, limit)
     },
     mealPlans: (_, __, context) => {
       return context.dataSources.mealApi.getMealPlans()
