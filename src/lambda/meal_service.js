@@ -83,7 +83,7 @@ class MealService extends RESTDataSource {
 
   async createMealPlan(planName, mealIds) {
     const newMeal = {
-      id: Date.now(),
+      id: Date.now().toString(),
       planName,
       mealIds,
     }
@@ -97,7 +97,7 @@ class MealService extends RESTDataSource {
   }
 
   getMealPlanById(mealPlanId) {
-    return mealPlans.find(plan => plan.id === mealPlanId)
+    return mealPlanCache[mealPlanId]
   }
 
   async getMealById(mealId) {
