@@ -51,11 +51,15 @@ function partition(collection, predicate) {
   return [consequent, alternate]
 }
 
+const mealPlanCache = {}
+
 class MealService extends RESTDataSource {
   willSendRequest(request) {
     request.headers.set('Authorization', `Bearer ${airTableApiKey}`)
   }
-  async getMealsWithFilter(ids, include, limit) {
+  async getMealsWithFilter(filter, limit) {
+    const { ids, filterType } = filter || {}
+    const shouldInclude = filterType == null ? true : filterType === 'INCLUDE'
     const response = await this.get(mealsTableUrl)
 
     const meals = response.records.map(r => {
@@ -67,17 +71,29 @@ class MealService extends RESTDataSource {
       }
     })
 
+    // ugh...this logic
     const [included, excluded] = partition(meals, item => {
-      return ids.includes(item.id)
+      return ids == null || ids.includes(item.id)
     })
 
-    const toReturn = include === 'INCLUDE' ? included : excluded
+    const toReturn = shouldInclude ? included : excluded
 
     return limit == null ? toReturn : toReturn.slice(0, limit)
   }
 
+  async createMealPlan(planName, mealIds) {
+    const newMeal = {
+      id: Date.now(),
+      planName,
+      mealIds,
+    }
+    mealPlanCache[newMeal.id] = newMeal
+
+    return newMeal
+  }
+
   getMealPlans() {
-    return mealPlans
+    return Object.values(mealPlanCache)
   }
 
   getMealPlanById(mealPlanId) {
