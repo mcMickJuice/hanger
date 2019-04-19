@@ -1,7 +1,6 @@
 import React from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import { MealPlan, Meal as MealType } from '../../types'
-import { deletePlan } from '../../meal_service'
 import Button from '@material-ui/core/Button'
 import { Query } from 'react-apollo'
 import { gql } from 'apollo-boost'
@@ -42,8 +41,7 @@ const MealPlanPage = ({ match, history }: RouteComponentProps<{ planId: string }
   // })
 
   async function handleDeletePlan() {
-    await deletePlan(planId)
-    history.replace('/')
+    // history.replace('/')
   }
 
   return (
