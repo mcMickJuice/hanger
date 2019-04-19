@@ -50,8 +50,8 @@
   "scripts": {
     "start": "run-p start:**",
     "start:app": "react-scripts start",
-    "start:lambda": "netlify-lambda serve src/lambda --config ./webpack.functions.js",
-    "start:watch-lambda": "nodemon -w ./src/lambda --exec yarn start:lambda",
+    "run:lambda": "netlify-lambda serve src/lambda --config ./webpack.functions.js",
+    "start:lambda": "nodemon -w ./src/lambda --exec yarn run:lambda",
     "build": "run-p build:**",
     "build:app": "react-scripts build",
     "build:lambda": "netlify-lambda build src/lambda",

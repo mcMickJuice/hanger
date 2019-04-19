@@ -6,6 +6,7 @@ const typeDefs = gql`
     meals(filter: MealFilter): [Meal!]!
     mealPlans: [MealPlan!]!
     mealPlan(mealPlanId: String!): MealPlan
+    meal(mealId: ID!): Meal
   }
 
   input MealFilter {
@@ -66,6 +67,9 @@ const resolvers = {
     },
     mealPlan: (_, { mealPlanId }, context) => {
       return context.dataSources.mealApi.getMealPlanById(mealPlanId)
+    },
+    meal: (_, { mealId }, context) => {
+      return context.dataSources.mealApi.getMealById(mealId)
     },
   },
   MealPlan: {
