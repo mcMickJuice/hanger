@@ -40,6 +40,8 @@ const typeDefs = gql`
     COMFORT
     TEXMEX
     INDIAN
+    MEDITERRANEAN
+    VEGETARIAN
   }
 
   enum Protein {
@@ -48,6 +50,7 @@ const typeDefs = gql`
     VEGETARIAN
     FLEXIBLE
     BEEF
+    SEAFOOD
   }
 
   enum Health {
@@ -59,8 +62,9 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    meals: (_, { filter }, context) => {
-      return context.dataSources.mealApi.getMealsWithFilter(filter.ids, filter.filterType === 'INCLUDE')
+    meals: (_, __, context) => {
+      // const { ids, filterType } = filter || {}
+      return context.dataSources.mealApi.getMealsWithFilter()
     },
     mealPlans: (_, __, context) => {
       return context.dataSources.mealApi.getMealPlans()
@@ -87,6 +91,8 @@ const resolvers = {
     COMFORT: 'Comfort',
     TEXMEX: 'TexMex',
     INDIAN: 'Indian',
+    MEDITERRANEAN: 'Mediterranean',
+    VEGETARIAN: 'Vegetarian',
   },
 
   Health: {
@@ -101,6 +107,7 @@ const resolvers = {
     VEGETARIAN: 'Vegetarian',
     FLEXIBLE: 'Flexible',
     BEEF: 'Beef',
+    SEAFOOD: 'Seafood',
   },
 }
 

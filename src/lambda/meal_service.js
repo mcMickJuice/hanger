@@ -1,3 +1,6 @@
+const { RESTDataSource } = require('apollo-datasource-rest')
+const { mealsTableUrl, airTableApiKey } = require('./api_config')
+
 const meals = [
   {
     id: 'id1',
@@ -48,13 +51,28 @@ function partition(collection, predicate) {
   return [consequent, alternate]
 }
 
-class MealService {
-  getMealsWithFilter(ids, include) {
-    const [included, excluded] = partition(meals, item => {
-      return ids.includes(item.id)
+class MealService extends RESTDataSource {
+  willSendRequest(request) {
+    request.headers.set('Authorization', `Bearer ${airTableApiKey}`)
+  }
+  async getMealsWithFilter(ids, include) {
+    // const [included, excluded] = partition(meals, item => {
+    //   return ids.includes(item.id)
+    // })
+
+    // return include ? included : excluded
+    const response = await this.get(mealsTableUrl)
+
+    const meals = response.records.map(r => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, ...rest } = r.fields
+      return {
+        ...rest,
+        id: r.id,
+      }
     })
 
-    return include ? included : excluded
+    return meals
   }
 
   getMealPlans() {
@@ -65,8 +83,18 @@ class MealService {
     return mealPlans.find(plan => plan.id === mealPlanId)
   }
 
-  getMealById(mealId) {
-    return meals.find(meal => meal.id === mealId)
+  async getMealById(mealId) {
+    const url = `${mealsTableUrl}/${mealId}`
+    const foundMeal = await this.get(url)
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ...rest } = foundMeal.fields
+    const mealToReturn = {
+      ...rest,
+      id: foundMeal.id,
+    }
+
+    return mealToReturn
   }
 }
 
