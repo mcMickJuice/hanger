@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Hanger",
+  "name": "Hanger - Meal Plan to Control your Hanger",
   "icons": [
     {
       "src": "favicon.ico",
