@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import 'typeface-roboto'
 import './global.css'
+import 'react-netlify-identity-widget/styles.css' // styling for login widget
 import { IdentityContextProvider } from 'react-netlify-identity-widget'
 import MealSelectPage from './pages/MealSelect/MealSelectPage'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
