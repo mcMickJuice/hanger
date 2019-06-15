@@ -9,7 +9,13 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createMealPlan(planName: String!, mealIds: [String!]!): MealPlan
+    createMealPlan(newMealPlan: NewMealPlanInput!): MealPlan
+    deleteMealPlan(mealPlanId: ID!): Boolean
+  }
+
+  input NewMealPlanInput {
+    planName: String!
+    mealIds: [String!]!
   }
 
   input MealFilter {

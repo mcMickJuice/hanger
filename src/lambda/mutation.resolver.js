@@ -1,6 +1,10 @@
 const MutatationResolver = {
-  createMealPlan: (_, { planName, mealIds }, context) => {
+  createMealPlan: (_, { newMealPlan }, context) => {
+    const { planName, mealIds } = newMealPlan
     return context.dataSources.mealApi.createMealPlan(planName, mealIds)
+  },
+  deleteMealPlan: (_, { mealPlanId }, context) => {
+    return context.dataSources.mealApi.deleteMealPlan(mealPlanId)
   },
 }
 

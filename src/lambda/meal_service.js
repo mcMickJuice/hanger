@@ -113,6 +113,10 @@ class MealService extends RESTDataSource {
 
     return mealToReturn
   }
+
+  deleteMealPlan(mealPlanId) {
+    return delete mealPlanCache[mealPlanId]
+  }
 }
 
 module.exports = MealService
