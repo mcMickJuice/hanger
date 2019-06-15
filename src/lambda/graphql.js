@@ -1,121 +1,18 @@
-const { ApolloServer, gql } = require('apollo-server-lambda')
+const { ApolloServer } = require('apollo-server-lambda')
 const MealService = require('./meal_service')
-
-const typeDefs = gql`
-  type Query {
-    meals(filter: MealFilter, limit: Int): [Meal!]!
-    mealPlans: [MealPlan!]!
-    mealPlan(mealPlanId: String!): MealPlan
-    meal(mealId: ID!): Meal
-  }
-
-  type Mutation {
-    createMealPlan(planName: String!, mealIds: [String!]!): MealPlan
-  }
-
-  input MealFilter {
-    filterType: FilterType
-    ids: [ID!]
-  }
-
-  enum FilterType {
-    INCLUDE
-    EXCLUDE
-  }
-
-  type Meal {
-    id: ID!
-    mealName: String!
-    persuasion: Persuasion!
-    protein: Protein!
-    health: Health!
-  }
-
-  type MealPlan {
-    id: ID!
-    planName: String!
-    numberOfMeals: Int!
-    meals: [Meal!]!
-  }
-
-  enum Persuasion {
-    ITALIAN
-    ASIAN
-    COMFORT
-    TEXMEX
-    INDIAN
-    MEDITERRANEAN
-    VEGETARIAN
-  }
-
-  enum Protein {
-    PORK
-    CHICKEN
-    VEGETARIAN
-    FLEXIBLE
-    BEEF
-    SEAFOOD
-  }
-
-  enum Health {
-    EVERYDAY
-    SPLURGE
-    HEALTHY
-  }
-`
+const typeDefs = require('./schema')
+const MutationResolver = require('./mutation.resolver')
+const QueryResolver = require('./query.resolver')
+const MealPlanResolver = require('./meal_plan.resolver')
+const EnumResolvers = require('./enum.resolver')
 
 const resolvers = {
-  Query: {
-    meals: (_, { filter, limit }, context) => {
-      return context.dataSources.mealApi.getMealsWithFilter(filter, limit)
-    },
-    mealPlans: (_, __, context) => {
-      return context.dataSources.mealApi.getMealPlans()
-    },
-    mealPlan: (_, { mealPlanId }, context) => {
-      return context.dataSources.mealApi.getMealPlanById(mealPlanId)
-    },
-    meal: (_, { mealId }, context) => {
-      return context.dataSources.mealApi.getMealById(mealId)
-    },
-  },
-  Mutation: {
-    createMealPlan: (_, { planName, mealIds }, context) => {
-      return context.dataSources.mealApi.createMealPlan(planName, mealIds)
-    },
-  },
-  MealPlan: {
-    numberOfMeals: parent => {
-      return parent.mealIds.length
-    },
-    meals: (parent, _, context) => {
-      return parent.mealIds.map(id => context.dataSources.mealApi.getMealById(id))
-    },
-  },
-  Persuasion: {
-    ITALIAN: 'Italian',
-    ASIAN: 'Asian',
-    COMFORT: 'Comfort',
-    TEXMEX: 'TexMex',
-    INDIAN: 'Indian',
-    MEDITERRANEAN: 'Mediterranean',
-    VEGETARIAN: 'Vegetarian',
-  },
-
-  Health: {
-    EVERYDAY: 'Everyday',
-    SPLURGE: 'Splurge',
-    HEALTHY: 'Healthy',
-  },
-
-  Protein: {
-    PORK: 'Pork',
-    CHICKEN: 'Chicken',
-    VEGETARIAN: 'Vegetarian',
-    FLEXIBLE: 'Flexible',
-    BEEF: 'Beef',
-    SEAFOOD: 'Seafood',
-  },
+  Query: QueryResolver,
+  Mutation: MutationResolver,
+  MealPlan: MealPlanResolver,
+  Persuasion: EnumResolvers.Persuasion,
+  Health: EnumResolvers.Health,
+  Protein: EnumResolvers.Protein,
 }
 
 const server = new ApolloServer({
