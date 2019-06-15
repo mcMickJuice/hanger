@@ -1,44 +1,14 @@
 import React from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import { MealPlan, Meal as MealType } from '../../types'
 import Button from '@material-ui/core/Button'
-import { Query } from 'react-apollo'
-import { gql } from 'apollo-boost'
-
-// ugh do we not have types on client?
-type MealPlanHydrated = Pick<MealPlan, 'id' | 'planName'> & {
-  meals: MealType[]
-}
-
-interface QueryShape {
-  id: string
-  planName: string
-  numberOfMeals: number
-  meals: {
-    mealName: string
-    id: string
-  }[]
-}
-
-const query = gql`
-  query MealPlanQuery($mealPlanId: String!) {
-    mealPlan(mealPlanId: $mealPlanId) {
-      id
-      planName
-      numberOfMeals
-      meals {
-        mealName
-        id
-      }
-    }
-  }
-`
+import { Query, Mutation } from 'react-apollo'
+import { GET_MEAL_PLAN, GetMealPlanQueryType, GetMealPlanVariableType } from '../../shared/queries/get_meal_plan'
+import { DELETE_MEAL_PLAN, DeleteMealPlanQueryType, DeleteMealPlanVariableType } from '../../shared/queries/delete_meal_plan'
+import Meal from '../MealSelect/Meal'
+import { GET_MEAL_PLANS } from '../../shared/queries/get_meal_plans'
 
 const MealPlanPage = ({ match, history }: RouteComponentProps<{ planId: string }>) => {
   const { planId } = match.params
-  // const [state, dispatch] = React.useReducer(reducer, {
-  // 	type: PageStateType.Initial
-  // })
 
   async function handleDeletePlan() {
     // history.replace('/')
@@ -48,8 +18,8 @@ const MealPlanPage = ({ match, history }: RouteComponentProps<{ planId: string }
     <div>
       <h1>Meal Plan</h1>
 
-      <Query<{ mealPlan: QueryShape }, { mealPlanId: string }>
-        query={query}
+      <Query<GetMealPlanQueryType, GetMealPlanVariableType>
+        query={GET_MEAL_PLAN}
         variables={{
           mealPlanId: planId,
         }}
@@ -62,24 +32,34 @@ const MealPlanPage = ({ match, history }: RouteComponentProps<{ planId: string }
           } else if (data == null) {
             return <div>No Plan found</div>
           } else {
-            console.log(data)
             return (
               <div>
                 <h2>Meal - {data.mealPlan.planName}</h2>
-                {/* {data.mealPlan.meals.map(meal => (
+                {data.mealPlan.meals.map(meal => (
                   <div style={{ marginBottom: '8px' }} key={meal.id}>
-                    <Meal meal={meal} />
+                    <Meal id={meal.id} name={meal.mealName} />
                   </div>
-                ))} */}
+                ))}
               </div>
             )
           }
         }}
       </Query>
 
-      <Button onClick={handleDeletePlan} style={{ marginTop: '16px' }} fullWidth variant="outlined">
-        Delete Plan
-      </Button>
+      <Mutation<DeleteMealPlanQueryType, DeleteMealPlanVariableType>
+        mutation={DELETE_MEAL_PLAN}
+        variables={{
+          mealPlanId: planId,
+        }}
+        onCompleted={() => history.replace('/plan')}
+        refetchQueries={[{ query: GET_MEAL_PLAN, variables: { mealPlanId: planId } }, { query: GET_MEAL_PLANS }]}
+      >
+        {deleteMealPlan => (
+          <Button onClick={() => deleteMealPlan()} style={{ marginTop: '16px' }} fullWidth variant="outlined">
+            Delete Plan
+          </Button>
+        )}
+      </Mutation>
     </div>
   )
 }

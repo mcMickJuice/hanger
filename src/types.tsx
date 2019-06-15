@@ -1,35 +1,35 @@
 export enum Persuasion {
-	Italian = 'Italian',
-	Asian = 'Asian',
-	Comfort = 'Comfort',
-	TexMex = 'TexMex',
-	Indian = 'Indian'
+  Italian = 'Italian',
+  Asian = 'Asian',
+  Comfort = 'Comfort',
+  TexMex = 'TexMex',
+  Indian = 'Indian',
 }
 
 export enum Health {
-	Everyday = 'Everyday',
-	Splurge = 'Splurge',
-	Healthy = 'Healthy'
+  Everyday = 'Everyday',
+  Splurge = 'Splurge',
+  Healthy = 'Healthy',
 }
 
 export enum Protein {
-	Pork = 'Pork',
-	Chicken = 'Chicken',
-	Vegetarian = 'Vegetarian',
-	Flexible = 'Flexible',
-	Beef = 'Beef'
+  Pork = 'Pork',
+  Chicken = 'Chicken',
+  Vegetarian = 'Vegetarian',
+  Flexible = 'Flexible',
+  Beef = 'Beef',
 }
 
 export interface Meal {
-	id: string
-	mealName: string
-	persuasion: Persuasion
-	protein: Protein
-	health: Health
+  id: string
+  mealName: string
+  persuasion: Persuasion
+  protein: Protein
+  health: Health
 }
 
 export interface MealPlan {
-	id: string
-	planName: string
-	mealIds: string[]
+  id: string
+  planName: string
+  mealIds: string[]
 }

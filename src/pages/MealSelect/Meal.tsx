@@ -1,22 +1,21 @@
 import React from 'react'
 
-import { Meal as MealType } from '../../types'
-
 interface Props {
-	meal: MealType
+  id: string
+  name: string
 }
 
 const style = {
-	padding: '16px',
-	backgroundColor: 'tomato'
+  padding: '16px',
+  backgroundColor: 'tomato',
 }
 
-const Meal = ({ meal }: Props) => {
-	return (
-		<div style={style}>
-			<div>{meal.mealName}</div>
-		</div>
-	)
+const Meal = ({ name }: Props) => {
+  return (
+    <div style={style}>
+      <div>{name}</div>
+    </div>
+  )
 }
 
 export default Meal

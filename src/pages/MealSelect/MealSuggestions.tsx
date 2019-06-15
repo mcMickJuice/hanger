@@ -71,7 +71,7 @@ const MealSuggestions = ({ keptMealIds, onKeepMeal }: Props) => {
                         onKeepMeal(meal.id)
                       }}
                     >
-                      <Meal meal={meal} />
+                      <Meal id={meal.id} name={meal.mealName} />
                     </MealTile>
                   )
                 })}

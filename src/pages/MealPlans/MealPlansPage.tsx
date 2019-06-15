@@ -1,25 +1,14 @@
 import React from 'react'
-import { MealPlan } from '../../types'
 import { Link } from 'react-router-dom'
 import { Query } from 'react-apollo'
-import { gql } from 'apollo-boost'
-
-const query = gql`
-  {
-    mealPlans {
-      id
-      planName
-      numberOfMeals
-    }
-  }
-`
+import { GET_MEAL_PLANS, GetMealPlansQueryType } from '../../shared/queries/get_meal_plans'
 
 const MealPlansPage = () => {
   return (
     <div>
       <h2>Meal Plans</h2>
       <div>
-        <Query<{ mealPlans: { id: string; planName: string; numberOfMeals: number }[] }> query={query}>
+        <Query<GetMealPlansQueryType> query={GET_MEAL_PLANS}>
           {({ loading, error, data }) => {
             if (loading) {
               return <div>Loading...</div>
