@@ -7,7 +7,6 @@ import AddIcon from '@material-ui/icons/Add'
 import ViewListIcon from '@material-ui/icons/ViewList'
 import IconButton from '@material-ui/core/IconButton'
 import { Link } from 'react-router-dom'
-import AuthModal from './AuthModal'
 
 interface NavProps {
 	children: React.ReactNode
@@ -44,7 +43,6 @@ const Nav = ({ children, classes }: NavProps & NavStyles) => {
 					positionFixed: classes.appBar
 				}}
 			>
-				<AuthModal />
 				<Toolbar classes={{ root: classes.toolbar }}>
 					<Link to="/">
 						<IconButton
